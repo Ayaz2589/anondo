@@ -46,8 +46,14 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  accounts      Account[]
-  sessions      Session[]
+
+  // NextAuth relations
+  accounts Account[]
+  sessions Session[]
+
+  // Event relations
+  createdEvents  Event[]            @relation("CreatedEvents")
+  participations EventParticipant[] @relation("EventParticipations")
 }
 
 model VerificationToken {
@@ -56,4 +62,105 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// Event Management System
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  description String?     @db.Text
+  location    String?
+  startDate   DateTime
+  endDate     DateTime?
+  maxCapacity Int? // null = unlimited
+  isPublic    Boolean     @default(true)
+  status      EventStatus @default(ACTIVE)
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  creatorId String
+  creator   User   @relation("CreatedEvents", fields: [creatorId], references: [id], onDelete: Cascade)
+
+  participants EventParticipant[]
+  categories   EventCategory[]
+  tags         EventTag[]
+
+  @@index([creatorId])
+  @@index([startDate])
+  @@index([status])
+}
+
+model EventParticipant {
+  id       String            @id @default(cuid())
+  status   ParticipantStatus @default(JOINED)
+  joinedAt DateTime          @default(now())
+  leftAt   DateTime?
+
+  // Relations
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId  String
+  user    User   @relation("EventParticipations", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId]) // Prevent duplicate participations
+  @@index([userId])
+  @@index([eventId])
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String?
+  color       String? // For UI theming
+  icon        String? // Icon identifier
+
+  createdAt DateTime @default(now())
+
+  events EventCategory[]
+}
+
+model EventCategory {
+  eventId    String
+  categoryId String
+
+  event    Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, categoryId])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  events EventTag[]
+}
+
+model EventTag {
+  eventId String
+  tagId   String
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, tagId])
+}
+
+// Enums
+enum EventStatus {
+  DRAFT
+  ACTIVE
+  CANCELLED
+  COMPLETED
+}
+
+enum ParticipantStatus {
+  JOINED
+  LEFT
+  KICKED
+  INVITED
 }

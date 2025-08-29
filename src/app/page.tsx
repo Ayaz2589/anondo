@@ -32,6 +32,24 @@ export default function Home() {
           <UserProfile />
         </div>
 
+        {/* Quick Actions */}
+        <div className="mb-12 text-center">
+          <div className="flex justify-center gap-4">
+            <a
+              href="/events"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              View My Events
+            </a>
+            <a
+              href="/events/create"
+              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+            >
+              Create Event
+            </a>
+          </div>
+        </div>
+
         {/* Features Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-white p-6 rounded-lg shadow-md">

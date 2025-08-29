@@ -1,0 +1,493 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+interface EventDetailsProps {
+  eventId: string;
+}
+
+interface EventWithDetails {
+  id: string;
+  title: string;
+  description: string | null;
+  location: string | null;
+  startDate: string;
+  endDate: string | null;
+  maxCapacity: number | null;
+  isPublic: boolean;
+  status: string;
+  createdAt: string;
+  creator: {
+    id: string;
+    name: string | null;
+    email: string;
+    image: string | null;
+  };
+  participants: Array<{
+    id: string;
+    status: string;
+    joinedAt: string;
+    user: {
+      id: string;
+      name: string | null;
+      email: string;
+      image: string | null;
+    };
+  }>;
+  categories: Array<{
+    category: {
+      id: string;
+      name: string;
+      color: string | null;
+      icon: string | null;
+    };
+  }>;
+  tags: Array<{
+    tag: {
+      id: string;
+      name: string;
+    };
+  }>;
+  _count: {
+    participants: number;
+  };
+}
+
+export function EventDetails({ eventId }: EventDetailsProps) {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [event, setEvent] = useState<EventWithDetails | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchEvent();
+  }, [eventId]);
+
+  const fetchEvent = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(`/api/events/${eventId}`);
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error("Event not found");
+        }
+        throw new Error("Failed to fetch event");
+      }
+
+      const data = await response.json();
+      setEvent(data.event);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleJoinEvent = async () => {
+    try {
+      setActionLoading(true);
+      const response = await fetch(`/api/events/${eventId}/join`, {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to join event");
+      }
+
+      await fetchEvent(); // Refresh event data
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to join event");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleLeaveEvent = async () => {
+    try {
+      setActionLoading(true);
+      const response = await fetch(`/api/events/${eventId}/leave`, {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to leave event");
+      }
+
+      await fetchEvent(); // Refresh event data
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to leave event");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteEvent = async () => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this event? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setActionLoading(true);
+      const response = await fetch(`/api/events/${eventId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to delete event");
+      }
+
+      router.push("/events");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to delete event");
+      setActionLoading(false);
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-600 mb-4">Error: {error}</p>
+        <button
+          onClick={fetchEvent}
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
+  if (!event) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-600">Event not found</p>
+      </div>
+    );
+  }
+
+  const isCreator = session?.user?.id === event.creator.id;
+  const isParticipant = event.participants.some(
+    (p) => p.user.id === session?.user?.id
+  );
+  const isFull = event.maxCapacity
+    ? event._count.participants >= event.maxCapacity
+    : false;
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex justify-between items-start mb-4">
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              {event.title}
+            </h1>
+
+            {/* Categories and Tags */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {event.categories.map(({ category }) => (
+                <span
+                  key={category.id}
+                  className="px-3 py-1 text-sm font-medium rounded-full text-white"
+                  style={{ backgroundColor: category.color || "#6B7280" }}
+                >
+                  {category.name}
+                </span>
+              ))}
+              {event.tags.map(({ tag }) => (
+                <span
+                  key={tag.id}
+                  className="px-3 py-1 text-sm font-medium rounded-full bg-gray-100 text-gray-700"
+                >
+                  #{tag.name}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Status Badge */}
+          <span
+            className={`px-3 py-1 text-sm font-medium rounded-full ${
+              event.status === "ACTIVE"
+                ? "bg-green-100 text-green-800"
+                : event.status === "DRAFT"
+                ? "bg-yellow-100 text-yellow-800"
+                : event.status === "CANCELLED"
+                ? "bg-red-100 text-red-800"
+                : "bg-gray-100 text-gray-800"
+            }`}
+          >
+            {event.status}
+          </span>
+        </div>
+
+        {/* Description */}
+        {event.description && (
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Description
+            </h3>
+            <p className="text-gray-700 whitespace-pre-wrap">
+              {event.description}
+            </p>
+          </div>
+        )}
+
+        {/* Event Details Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Date & Time</h4>
+              <div className="flex items-center text-gray-600">
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                <div>
+                  <p>{formatDate(event.startDate)}</p>
+                  {event.endDate && (
+                    <p className="text-sm text-gray-500">
+                      Ends: {formatDate(event.endDate)}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {event.location && (
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Location</h4>
+                <div className="flex items-center text-gray-600">
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  <p>{event.location}</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Capacity</h4>
+              <div className="flex items-center text-gray-600">
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
+                  />
+                </svg>
+                <p>
+                  {event._count.participants} participant
+                  {event._count.participants !== 1 ? "s" : ""}
+                  {event.maxCapacity && ` / ${event.maxCapacity} max`}
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Visibility</h4>
+              <span
+                className={`px-2 py-1 text-xs font-medium rounded-full ${
+                  event.isPublic
+                    ? "bg-green-100 text-green-800"
+                    : "bg-gray-100 text-gray-800"
+                }`}
+              >
+                {event.isPublic ? "Public" : "Private"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        {session && (
+          <div className="flex gap-3 pt-4 border-t border-gray-200">
+            {isCreator ? (
+              <>
+                <Link
+                  href={`/events/${event.id}/edit`}
+                  className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Edit Event
+                </Link>
+                <button
+                  onClick={handleDeleteEvent}
+                  disabled={actionLoading}
+                  className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-colors disabled:opacity-50"
+                >
+                  {actionLoading ? "Deleting..." : "Delete Event"}
+                </button>
+              </>
+            ) : (
+              <>
+                {isParticipant ? (
+                  <button
+                    onClick={handleLeaveEvent}
+                    disabled={actionLoading}
+                    className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-colors disabled:opacity-50"
+                  >
+                    {actionLoading ? "Leaving..." : "Leave Event"}
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleJoinEvent}
+                    disabled={actionLoading || isFull}
+                    className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors disabled:opacity-50"
+                  >
+                    {actionLoading
+                      ? "Joining..."
+                      : isFull
+                      ? "Event Full"
+                      : "Join Event"}
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Creator Info */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Event Creator
+        </h3>
+        <div className="flex items-center">
+          {event.creator.image ? (
+            <Image
+              src={event.creator.image}
+              alt={event.creator.name || "Creator"}
+              width={48}
+              height={48}
+              className="w-12 h-12 rounded-full mr-4"
+            />
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-gray-300 mr-4 flex items-center justify-center">
+              <span className="text-lg font-medium text-gray-600">
+                {event.creator.name?.charAt(0) || event.creator.email.charAt(0)}
+              </span>
+            </div>
+          )}
+          <div>
+            <p className="font-medium text-gray-900">
+              {event.creator.name || event.creator.email}
+            </p>
+            <p className="text-sm text-gray-500">
+              Created on {new Date(event.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Participants */}
+      {event.participants.length > 0 && (
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Participants ({event.participants.length})
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {event.participants.map((participant) => (
+              <div
+                key={participant.id}
+                className="flex items-center p-3 bg-gray-50 rounded-lg"
+              >
+                {participant.user.image ? (
+                  <Image
+                    src={participant.user.image}
+                    alt={participant.user.name || "Participant"}
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 rounded-full mr-3"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gray-300 mr-3 flex items-center justify-center">
+                    <span className="text-xs font-medium text-gray-600">
+                      {participant.user.name?.charAt(0) ||
+                        participant.user.email.charAt(0)}
+                    </span>
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {participant.user.name || participant.user.email}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Joined {new Date(participant.joinedAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
