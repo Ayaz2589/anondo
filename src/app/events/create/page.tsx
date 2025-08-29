@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { EventForm } from "@/components/events/EventForm";
+import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 export default function CreateEventPage() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -13,10 +18,13 @@ export default function CreateEventPage() {
                 href="/events"
                 className="text-gray-500 hover:text-gray-700 mr-4"
               >
-                ← Back to Events
+                {t("navigation.backToEvents")}
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">Create Event</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {t("events.createEvent")}
+              </h1>
             </div>
+            <LanguageSwitcher />
           </div>
         </div>
       </header>

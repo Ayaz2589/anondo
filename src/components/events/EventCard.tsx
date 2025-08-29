@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "react-i18next";
 
 interface EventCardProps {
   event: {
@@ -54,6 +55,7 @@ export function EventCard({
   showActions = true,
 }: EventCardProps) {
   const { data: session } = useSession();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
   const isCreator = session?.user?.id === event.creator.id;
@@ -92,7 +94,7 @@ export function EventCard({
 
   const handleDelete = async () => {
     if (!onDelete) return;
-    if (window.confirm("Are you sure you want to delete this event?")) {
+    if (window.confirm(t("messages.confirmDelete"))) {
       setIsLoading(true);
       await onDelete(event.id);
       setIsLoading(false);
@@ -209,7 +211,7 @@ export function EventCard({
             />
           </svg>
           <span>
-            {event._count.participants} participant
+            {event._count.participants} {t("events.participant")}
             {event._count.participants !== 1 ? "s" : ""}
             {event.maxCapacity && ` / ${event.maxCapacity}`}
           </span>
@@ -237,7 +239,7 @@ export function EventCard({
           <p className="text-sm font-medium text-gray-900">
             {event.creator.name || event.creator.email}
           </p>
-          <p className="text-xs text-gray-500">Event Creator</p>
+          <p className="text-xs text-gray-500">{t("events.eventCreator")}</p>
         </div>
       </div>
 
@@ -250,14 +252,14 @@ export function EventCard({
                 href={`/events/${event.id}/edit`}
                 className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors text-center"
               >
-                Edit Event
+                {t("events.editEvent")}
               </Link>
               <button
                 onClick={handleDelete}
                 disabled={isLoading}
                 className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
               >
-                {isLoading ? "..." : "Delete"}
+                {isLoading ? "..." : t("common.delete")}
               </button>
             </>
           ) : (
@@ -268,7 +270,7 @@ export function EventCard({
                   disabled={isLoading}
                   className="flex-1 bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
                 >
-                  {isLoading ? "Leaving..." : "Leave Event"}
+                  {isLoading ? t("events.leaving") : t("events.leaveEvent")}
                 </button>
               ) : (
                 <button
@@ -277,17 +279,17 @@ export function EventCard({
                   className="flex-1 bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition-colors disabled:opacity-50"
                 >
                   {isLoading
-                    ? "Joining..."
+                    ? t("events.joining")
                     : isFull
-                    ? "Event Full"
-                    : "Join Event"}
+                    ? t("events.eventFull")
+                    : t("events.joinEvent")}
                 </button>
               )}
               <Link
                 href={`/events/${event.id}`}
                 className="px-4 py-2 bg-gray-600 text-white rounded-md text-sm font-medium hover:bg-gray-700 transition-colors"
               >
-                View Details
+                {t("events.viewDetails")}
               </Link>
             </>
           )}

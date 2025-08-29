@@ -3,12 +3,15 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { EventForm } from "@/components/events/EventForm";
+import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 interface EditEventPageProps {
   params: Promise<{ id: string }>;
 }
 
 export default function EditEventPage({ params }: EditEventPageProps) {
+  const { t } = useTranslation();
   const [eventId, setEventId] = useState<string>("");
   const [eventData, setEventData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -27,12 +30,14 @@ export default function EditEventPage({ params }: EditEventPageProps) {
     try {
       const response = await fetch(`/api/events/${id}`);
       if (!response.ok) {
-        throw new Error("Failed to fetch event data");
+        throw new Error(t("messages.failedToFetchEvent"));
       }
       const data = await response.json();
       setEventData(data.event);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(
+        err instanceof Error ? err.message : t("messages.anErrorOccurred")
+      );
     } finally {
       setLoading(false);
     }
@@ -50,12 +55,14 @@ export default function EditEventPage({ params }: EditEventPageProps) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">Error: {error}</p>
+          <p className="text-red-600 mb-4">
+            {t("common.error")}: {error}
+          </p>
           <Link
             href="/events"
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
           >
-            Back to Events
+            {t("navigation.backToEvents")}
           </Link>
         </div>
       </div>
@@ -73,10 +80,13 @@ export default function EditEventPage({ params }: EditEventPageProps) {
                 href={`/events/${eventId}`}
                 className="text-gray-500 hover:text-gray-700 mr-4"
               >
-                ← Back to Event
+                {t("navigation.backToEvent")}
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">Edit Event</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {t("events.editEvent")}
+              </h1>
             </div>
+            <LanguageSwitcher />
           </div>
         </div>
       </header>

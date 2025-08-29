@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -59,6 +60,7 @@ interface EventWithDetails {
 
 export function EventDetails({ eventId }: EventDetailsProps) {
   const { data: session } = useSession();
+  const { t } = useTranslation();
   const router = useRouter();
   const [event, setEvent] = useState<EventWithDetails | null>(null);
   const [loading, setLoading] = useState(true);
@@ -77,9 +79,9 @@ export function EventDetails({ eventId }: EventDetailsProps) {
       const response = await fetch(`/api/events/${eventId}`);
       if (!response.ok) {
         if (response.status === 404) {
-          throw new Error("Event not found");
+          throw new Error(t("events.eventNotFound"));
         }
-        throw new Error("Failed to fetch event");
+        throw new Error(t("messages.failedToFetchEvent"));
       }
 
       const data = await response.json();
@@ -132,11 +134,7 @@ export function EventDetails({ eventId }: EventDetailsProps) {
   };
 
   const handleDeleteEvent = async () => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete this event? This action cannot be undone."
-      )
-    ) {
+    if (!window.confirm(t("messages.confirmDeletePermanent"))) {
       return;
     }
 
@@ -181,12 +179,14 @@ export function EventDetails({ eventId }: EventDetailsProps) {
   if (error) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600 mb-4">Error: {error}</p>
+        <p className="text-red-600 mb-4">
+          {t("common.error")}: {error}
+        </p>
         <button
           onClick={fetchEvent}
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
         >
-          Try Again
+          {t("common.tryAgain")}
         </button>
       </div>
     );
@@ -195,7 +195,7 @@ export function EventDetails({ eventId }: EventDetailsProps) {
   if (!event) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">Event not found</p>
+        <p className="text-gray-600">{t("events.eventNotFound")}</p>
       </div>
     );
   }
@@ -260,7 +260,7 @@ export function EventDetails({ eventId }: EventDetailsProps) {
         {event.description && (
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Description
+              {t("events.description")}
             </h3>
             <p className="text-gray-700 whitespace-pre-wrap">
               {event.description}
@@ -272,7 +272,9 @@ export function EventDetails({ eventId }: EventDetailsProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div className="space-y-4">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Date & Time</h4>
+              <h4 className="font-semibold text-gray-900 mb-2">
+                {t("events.dateTime")}
+              </h4>
               <div className="flex items-center text-gray-600">
                 <svg
                   className="w-5 h-5 mr-2"
@@ -291,7 +293,7 @@ export function EventDetails({ eventId }: EventDetailsProps) {
                   <p>{formatDate(event.startDate)}</p>
                   {event.endDate && (
                     <p className="text-sm text-gray-500">
-                      Ends: {formatDate(event.endDate)}
+                      {t("events.ends")}: {formatDate(event.endDate)}
                     </p>
                   )}
                 </div>
@@ -300,7 +302,9 @@ export function EventDetails({ eventId }: EventDetailsProps) {
 
             {event.location && (
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Location</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  {t("events.location")}
+                </h4>
                 <div className="flex items-center text-gray-600">
                   <svg
                     className="w-5 h-5 mr-2"
@@ -329,7 +333,9 @@ export function EventDetails({ eventId }: EventDetailsProps) {
 
           <div className="space-y-4">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Capacity</h4>
+              <h4 className="font-semibold text-gray-900 mb-2">
+                {t("events.capacity")}
+              </h4>
               <div className="flex items-center text-gray-600">
                 <svg
                   className="w-5 h-5 mr-2"
@@ -345,7 +351,7 @@ export function EventDetails({ eventId }: EventDetailsProps) {
                   />
                 </svg>
                 <p>
-                  {event._count.participants} participant
+                  {event._count.participants} {t("events.participant")}
                   {event._count.participants !== 1 ? "s" : ""}
                   {event.maxCapacity && ` / ${event.maxCapacity} max`}
                 </p>
@@ -353,7 +359,9 @@ export function EventDetails({ eventId }: EventDetailsProps) {
             </div>
 
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Visibility</h4>
+              <h4 className="font-semibold text-gray-900 mb-2">
+                {t("events.visibility")}
+              </h4>
               <span
                 className={`px-2 py-1 text-xs font-medium rounded-full ${
                   event.isPublic
@@ -361,7 +369,7 @@ export function EventDetails({ eventId }: EventDetailsProps) {
                     : "bg-gray-100 text-gray-800"
                 }`}
               >
-                {event.isPublic ? "Public" : "Private"}
+                {event.isPublic ? t("common.public") : t("common.private")}
               </span>
             </div>
           </div>
@@ -376,7 +384,7 @@ export function EventDetails({ eventId }: EventDetailsProps) {
                   href={`/events/${event.id}/edit`}
                   className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
                 >
-                  Edit Event
+                  {t("events.editEvent")}
                 </Link>
                 <button
                   onClick={handleDeleteEvent}
@@ -418,7 +426,7 @@ export function EventDetails({ eventId }: EventDetailsProps) {
       {/* Creator Info */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Event Creator
+          {t("events.eventCreator")}
         </h3>
         <div className="flex items-center">
           {event.creator.image ? (
@@ -441,7 +449,8 @@ export function EventDetails({ eventId }: EventDetailsProps) {
               {event.creator.name || event.creator.email}
             </p>
             <p className="text-sm text-gray-500">
-              Created on {new Date(event.createdAt).toLocaleDateString()}
+              {t("events.createdOn")}{" "}
+              {new Date(event.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
@@ -451,7 +460,7 @@ export function EventDetails({ eventId }: EventDetailsProps) {
       {event.participants.length > 0 && (
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Participants ({event.participants.length})
+            {t("events.participants")} ({event.participants.length})
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {event.participants.map((participant) => (
@@ -480,7 +489,8 @@ export function EventDetails({ eventId }: EventDetailsProps) {
                     {participant.user.name || participant.user.email}
                   </p>
                   <p className="text-xs text-gray-500">
-                    Joined {new Date(participant.joinedAt).toLocaleDateString()}
+                    {t("events.joinedOn")}{" "}
+                    {new Date(participant.joinedAt).toLocaleDateString()}
                   </p>
                 </div>
               </div>

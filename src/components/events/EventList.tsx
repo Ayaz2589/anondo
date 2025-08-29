@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "react-i18next";
 import { EventCard } from "./EventCard";
 
 interface Event {
@@ -46,6 +47,7 @@ interface EventListProps {
 
 export function EventList({ type = "all", title }: EventListProps) {
   const { data: session } = useSession();
+  const { t } = useTranslation();
   const [events, setEvents] = useState<Event[]>([]);
   const [createdEvents, setCreatedEvents] = useState<Event[]>([]);
   const [joinedEvents, setJoinedEvents] = useState<Event[]>([]);
@@ -67,7 +69,7 @@ export function EventList({ type = "all", title }: EventListProps) {
       if (type === "all") {
         // Fetch both created and joined events
         const response = await fetch(`/api/users/${session?.user?.id}/events`);
-        if (!response.ok) throw new Error("Failed to fetch events");
+        if (!response.ok) throw new Error(t("messages.failedToFetch"));
 
         const data = await response.json();
         setCreatedEvents(data.created || []);
@@ -77,13 +79,15 @@ export function EventList({ type = "all", title }: EventListProps) {
         const response = await fetch(
           `/api/users/${session?.user?.id}/events?type=${type}`
         );
-        if (!response.ok) throw new Error("Failed to fetch events");
+        if (!response.ok) throw new Error(t("messages.failedToFetch"));
 
         const data = await response.json();
         setEvents(data.events || []);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(
+        err instanceof Error ? err.message : t("messages.anErrorOccurred")
+      );
     } finally {
       setLoading(false);
     }
@@ -97,13 +101,13 @@ export function EventList({ type = "all", title }: EventListProps) {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Failed to join event");
+        throw new Error(data.error || t("messages.failedToJoin"));
       }
 
       // Refresh events
       await fetchUserEvents();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to join event");
+      alert(err instanceof Error ? err.message : t("messages.failedToJoin"));
     }
   };
 
@@ -115,13 +119,13 @@ export function EventList({ type = "all", title }: EventListProps) {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Failed to leave event");
+        throw new Error(data.error || t("messages.failedToLeave"));
       }
 
       // Refresh events
       await fetchUserEvents();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to leave event");
+      alert(err instanceof Error ? err.message : t("messages.failedToLeave"));
     }
   };
 
@@ -133,20 +137,20 @@ export function EventList({ type = "all", title }: EventListProps) {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Failed to delete event");
+        throw new Error(data.error || t("messages.failedToDelete"));
       }
 
       // Refresh events
       await fetchUserEvents();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to delete event");
+      alert(err instanceof Error ? err.message : t("messages.failedToDelete"));
     }
   };
 
   if (!session) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">Please sign in to view your events.</p>
+        <p className="text-gray-600">{t("auth.signInRequired")}</p>
       </div>
     );
   }
@@ -162,12 +166,14 @@ export function EventList({ type = "all", title }: EventListProps) {
   if (error) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600 mb-4">Error: {error}</p>
+        <p className="text-red-600 mb-4">
+          {t("common.error")}: {error}
+        </p>
         <button
           onClick={fetchUserEvents}
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
         >
-          Try Again
+          {t("common.tryAgain")}
         </button>
       </div>
     );
@@ -190,13 +196,13 @@ export function EventList({ type = "all", title }: EventListProps) {
               d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-gray-600 mb-4">No events found</p>
+          <p className="text-gray-600 mb-4">{t("events.noEventsFound")}</p>
           {type === "created" && (
             <a
               href="/events/create"
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 inline-block"
             >
-              Create Your First Event
+              {t("events.createFirstEvent")}
             </a>
           )}
         </div>
@@ -228,7 +234,7 @@ export function EventList({ type = "all", title }: EventListProps) {
               href="/events/create"
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
             >
-              Create Event
+              {t("events.createEvent")}
             </a>
           </div>
         )}
@@ -244,7 +250,7 @@ export function EventList({ type = "all", title }: EventListProps) {
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
-              Created Events ({createdEvents.length})
+              {t("events.createdEvents")} ({createdEvents.length})
             </button>
             <button
               onClick={() => setActiveTab("joined")}
@@ -254,7 +260,7 @@ export function EventList({ type = "all", title }: EventListProps) {
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
-              Joined Events ({joinedEvents.length})
+              {t("events.joinedEvents")} ({joinedEvents.length})
             </button>
           </nav>
         </div>
@@ -279,7 +285,7 @@ export function EventList({ type = "all", title }: EventListProps) {
               href="/events/create"
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
             >
-              Create Event
+              {t("events.createEvent")}
             </a>
           )}
         </div>

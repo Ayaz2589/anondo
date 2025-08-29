@@ -1,0 +1,141 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "join": "Join",
+    "leave": "Leave",
+    "back": "Back",
+    "tryAgain": "Try Again",
+    "yes": "Yes",
+    "no": "No",
+    "public": "Public",
+    "private": "Private",
+    "active": "Active",
+    "draft": "Draft",
+    "cancelled": "Cancelled",
+    "completed": "Completed"
+  },
+  "navigation": {
+    "home": "Home",
+    "events": "Events",
+    "myEvents": "My Events",
+    "createEvent": "Create Event",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "backToEvents": "← Back to Events",
+    "backToEvent": "← Back to Event"
+  },
+  "auth": {
+    "signInWith": "Sign in with {{provider}}",
+    "signInToAccount": "Sign in to your account",
+    "pleaseSignIn": "Please sign in to continue",
+    "signInRequired": "Please sign in to view your events",
+    "signInToCreateEvents": "Please sign in to create or edit events",
+    "authenticationError": "Authentication Error",
+    "signedInAs": "Signed in as"
+  },
+  "home": {
+    "title": "Welcome to Anondo",
+    "subtitle": "A Next.js application with Google OAuth authentication",
+    "viewMyEvents": "View My Events",
+    "createEvent": "Create Event",
+    "features": {
+      "secure": {
+        "title": "Secure Authentication",
+        "description": "Google OAuth integration for secure user authentication"
+      },
+      "modern": {
+        "title": "Modern Stack",
+        "description": "Built with Next.js 15, TypeScript, and Tailwind CSS"
+      },
+      "scalable": {
+        "title": "Scalable Architecture",
+        "description": "Designed for growth with clean code architecture"
+      }
+    }
+  },
+  "events": {
+    "title": "Events",
+    "myEvents": "My Events",
+    "eventDetails": "Event Details",
+    "createEvent": "Create Event",
+    "editEvent": "Edit Event",
+    "createNewEvent": "Create New Event",
+    "noEventsFound": "No events found",
+    "createFirstEvent": "Create Your First Event",
+    "eventNotFound": "Event not found",
+    "eventTitle": "Event Title",
+    "description": "Description",
+    "location": "Location",
+    "startDate": "Start Date & Time",
+    "endDate": "End Date & Time",
+    "maxCapacity": "Maximum Capacity",
+    "capacity": "Capacity",
+    "visibility": "Event Visibility",
+    "categories": "Categories",
+    "tags": "Tags",
+    "addTags": "Add tags (press Enter)",
+    "add": "Add",
+    "participants": "Participants",
+    "participant": "participant",
+    "eventCreator": "Event Creator",
+    "createdOn": "Created on",
+    "joinedOn": "Joined",
+    "createdEvents": "Created Events",
+    "joinedEvents": "Joined Events",
+    "eventFull": "Event Full",
+    "joinEvent": "Join Event",
+    "leaveEvent": "Leave Event",
+    "deleteEvent": "Delete Event",
+    "updateEvent": "Update Event",
+    "viewDetails": "View Details",
+    "joining": "Joining...",
+    "leaving": "Leaving...",
+    "deleting": "Deleting...",
+    "saving": "Saving...",
+    "unlimited": "Unlimited",
+    "required": "required",
+    "optional": "optional",
+    "publicDescription": "Public - Anyone can see and join this event",
+    "privateDescription": "Private - Only people with the link can see this event",
+    "unlimitedCapacity": "Leave empty for unlimited capacity",
+    "dateTime": "Date & Time",
+    "ends": "Ends"
+  },
+  "forms": {
+    "validation": {
+      "titleRequired": "Title is required",
+      "startDateRequired": "Start date is required",
+      "endDateAfterStart": "End date must be after start date",
+      "capacityMinimum": "Capacity must be at least 1"
+    },
+    "placeholders": {
+      "eventTitle": "Enter event title",
+      "eventDescription": "Describe your event...",
+      "eventLocation": "Event location",
+      "unlimitedCapacity": "Leave empty for unlimited"
+    }
+  },
+  "messages": {
+    "confirmDelete": "Are you sure you want to delete this event?",
+    "confirmDeletePermanent": "Are you sure you want to delete this event? This action cannot be undone.",
+    "failedToJoin": "Failed to join event",
+    "failedToLeave": "Failed to leave event",
+    "failedToDelete": "Failed to delete event",
+    "failedToSave": "Failed to save event",
+    "failedToFetch": "Failed to fetch events",
+    "failedToFetchEvent": "Failed to fetch event",
+    "failedToFetchCategories": "Failed to fetch categories",
+    "anErrorOccurred": "An error occurred"
+  },
+  "language": {
+    "selectLanguage": "Select Language",
+    "english": "English",
+    "bangla": "বাংলা"
+  }
+}

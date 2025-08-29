@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "react-i18next";
 
 interface Category {
   id: string;
@@ -26,6 +27,7 @@ interface EventFormProps {
 
 export function EventForm({ eventId, initialData }: EventFormProps) {
   const { data: session } = useSession();
+  const { t } = useTranslation();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -62,7 +64,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
         setCategories(data.categories || []);
       }
     } catch (error) {
-      console.error("Failed to fetch categories:", error);
+      console.error(t("messages.failedToFetchCategories"), error);
     }
   };
 
@@ -70,11 +72,11 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
     const newErrors: Record<string, string> = {};
 
     if (!formData.title.trim()) {
-      newErrors.title = "Title is required";
+      newErrors.title = t("forms.validation.titleRequired");
     }
 
     if (!formData.startDate) {
-      newErrors.startDate = "Start date is required";
+      newErrors.startDate = t("forms.validation.startDateRequired");
     }
 
     if (
@@ -82,11 +84,11 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
       formData.startDate &&
       new Date(formData.endDate) <= new Date(formData.startDate)
     ) {
-      newErrors.endDate = "End date must be after start date";
+      newErrors.endDate = t("forms.validation.endDateAfterStart");
     }
 
     if (formData.maxCapacity && parseInt(formData.maxCapacity) < 1) {
-      newErrors.maxCapacity = "Capacity must be at least 1";
+      newErrors.maxCapacity = t("forms.validation.capacityMinimum");
     }
 
     setErrors(newErrors);
@@ -128,13 +130,15 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Failed to save event");
+        throw new Error(data.error || t("messages.failedToSave"));
       }
 
       const result = await response.json();
       router.push(`/events/${result.event.id}`);
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to save event");
+      alert(
+        error instanceof Error ? error.message : t("messages.failedToSave")
+      );
     } finally {
       setLoading(false);
     }
@@ -177,9 +181,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
   if (!session) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">
-          Please sign in to create or edit events.
-        </p>
+        <p className="text-gray-600">{t("auth.signInToCreateEvents")}</p>
       </div>
     );
   }
@@ -188,7 +190,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
     <div className="max-w-2xl mx-auto">
       <div className="bg-white rounded-lg shadow-md p-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">
-          {eventId ? "Edit Event" : "Create New Event"}
+          {eventId ? t("events.editEvent") : t("events.createNewEvent")}
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -198,7 +200,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
               htmlFor="title"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Event Title *
+              {t("events.eventTitle")} *
             </label>
             <input
               type="text"
@@ -210,7 +212,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 errors.title ? "border-red-500" : "border-gray-300"
               }`}
-              placeholder="Enter event title"
+              placeholder={t("forms.placeholders.eventTitle")}
             />
             {errors.title && (
               <p className="mt-1 text-sm text-red-600">{errors.title}</p>
@@ -223,7 +225,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
               htmlFor="description"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Description
+              {t("events.description")}
             </label>
             <textarea
               id="description"
@@ -236,7 +238,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
                 }))
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Describe your event..."
+              placeholder={t("forms.placeholders.eventDescription")}
             />
           </div>
 
@@ -246,7 +248,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
               htmlFor="location"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Location
+              {t("events.location")}
             </label>
             <input
               type="text"
@@ -256,7 +258,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
                 setFormData((prev) => ({ ...prev, location: e.target.value }))
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Event location"
+              placeholder={t("forms.placeholders.eventLocation")}
             />
           </div>
 
@@ -267,7 +269,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
                 htmlFor="startDate"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Start Date & Time *
+                {t("events.startDate")} *
               </label>
               <input
                 type="datetime-local"
@@ -293,7 +295,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
                 htmlFor="endDate"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                End Date & Time
+                {t("events.endDate")}
               </label>
               <input
                 type="datetime-local"
@@ -318,7 +320,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
               htmlFor="maxCapacity"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Maximum Capacity
+              {t("events.maxCapacity")}
             </label>
             <input
               type="number"
@@ -334,20 +336,20 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 errors.maxCapacity ? "border-red-500" : "border-gray-300"
               }`}
-              placeholder="Leave empty for unlimited"
+              placeholder={t("forms.placeholders.unlimitedCapacity")}
             />
             {errors.maxCapacity && (
               <p className="mt-1 text-sm text-red-600">{errors.maxCapacity}</p>
             )}
             <p className="mt-1 text-sm text-gray-500">
-              Leave empty for unlimited capacity
+              {t("events.unlimitedCapacity")}
             </p>
           </div>
 
           {/* Visibility */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Event Visibility
+              {t("events.visibility")}
             </label>
             <div className="space-y-2">
               <label className="flex items-center">
@@ -360,9 +362,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
                   }
                   className="mr-2"
                 />
-                <span className="text-sm">
-                  Public - Anyone can see and join this event
-                </span>
+                <span className="text-sm">{t("events.publicDescription")}</span>
               </label>
               <label className="flex items-center">
                 <input
@@ -375,7 +375,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
                   className="mr-2"
                 />
                 <span className="text-sm">
-                  Private - Only people with the link can see this event
+                  {t("events.privateDescription")}
                 </span>
               </label>
             </div>
@@ -385,7 +385,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
           {categories.length > 0 && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Categories
+                {t("events.categories")}
               </label>
               <div className="flex flex-wrap gap-2">
                 {categories.map((category) => (
@@ -416,7 +416,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
           {/* Tags */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tags
+              {t("events.tags")}
             </label>
             <div className="flex flex-wrap gap-2 mb-2">
               {formData.tagNames.map((tag) => (
@@ -442,14 +442,14 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Add tags (press Enter)"
+                placeholder={t("events.addTags")}
               />
               <button
                 type="button"
                 onClick={handleAddTag}
                 className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
               >
-                Add
+                {t("events.add")}
               </button>
             </div>
           </div>
@@ -462,17 +462,17 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
               className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {loading
-                ? "Saving..."
+                ? t("events.saving")
                 : eventId
-                ? "Update Event"
-                : "Create Event"}
+                ? t("events.updateEvent")
+                : t("events.createEvent")}
             </button>
             <button
               type="button"
               onClick={() => router.back()}
               className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
             >
-              Cancel
+              {t("common.cancel")}
             </button>
           </div>
         </form>

@@ -1,7 +1,13 @@
+"use client";
+
 import { SignInButton } from "@/components/auth/SignInButton";
 import { UserProfile } from "@/components/auth/UserProfile";
+import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -11,7 +17,10 @@ export default function Home() {
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-gray-900">Anondo</h1>
             </div>
-            <SignInButton />
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher />
+              <SignInButton />
+            </div>
           </div>
         </div>
       </header>
@@ -20,11 +29,9 @@ export default function Home() {
       <main className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
-            Welcome to Anondo
+            {t("home.title")}
           </h2>
-          <p className="mt-4 text-xl text-gray-600">
-            A Next.js application with Google OAuth authentication
-          </p>
+          <p className="mt-4 text-xl text-gray-600">{t("home.subtitle")}</p>
         </div>
 
         {/* User Profile Section */}
@@ -39,13 +46,13 @@ export default function Home() {
               href="/events"
               className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
-              View My Events
+              {t("home.viewMyEvents")}
             </a>
             <a
               href="/events/create"
               className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
             >
-              Create Event
+              {t("home.createEvent")}
             </a>
           </div>
         </div>
@@ -69,11 +76,10 @@ export default function Home() {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Secure Authentication
+              {t("home.features.secure.title")}
             </h3>
             <p className="text-gray-600">
-              Google OAuth integration with NextAuth.js for secure user
-              authentication.
+              {t("home.features.secure.description")}
             </p>
           </div>
 
@@ -94,11 +100,10 @@ export default function Home() {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Next.js API Routes
+              {t("home.features.modern.title")}
             </h3>
             <p className="text-gray-600">
-              Structured backend with routers, services, and schemas using
-              Next.js API routes.
+              {t("home.features.modern.description")}
             </p>
           </div>
 
@@ -119,11 +124,10 @@ export default function Home() {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              TypeScript & Zod
+              {t("home.features.scalable.title")}
             </h3>
             <p className="text-gray-600">
-              Full TypeScript support with Zod schema validation for type-safe
-              development.
+              {t("home.features.scalable.description")}
             </p>
           </div>
         </div>

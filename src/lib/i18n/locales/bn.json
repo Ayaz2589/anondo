@@ -1,0 +1,141 @@
+{
+  "common": {
+    "loading": "লোড হচ্ছে...",
+    "error": "ত্রুটি",
+    "save": "সংরক্ষণ",
+    "cancel": "বাতিল",
+    "delete": "মুছুন",
+    "edit": "সম্পাদনা",
+    "create": "তৈরি করুন",
+    "join": "যোগ দিন",
+    "leave": "ছেড়ে দিন",
+    "back": "ফিরে যান",
+    "tryAgain": "আবার চেষ্টা করুন",
+    "yes": "হ্যাঁ",
+    "no": "না",
+    "public": "সর্বজনীন",
+    "private": "ব্যক্তিগত",
+    "active": "সক্রিয়",
+    "draft": "খসড়া",
+    "cancelled": "বাতিল",
+    "completed": "সম্পন্ন"
+  },
+  "navigation": {
+    "home": "হোম",
+    "events": "ইভেন্ট",
+    "myEvents": "আমার ইভেন্ট",
+    "createEvent": "ইভেন্ট তৈরি করুন",
+    "signIn": "সাইন ইন",
+    "signOut": "সাইন আউট",
+    "backToEvents": "← ইভেন্টে ফিরে যান",
+    "backToEvent": "← ইভেন্টে ফিরে যান"
+  },
+  "auth": {
+    "signInWith": "{{provider}} দিয়ে সাইন ইন করুন",
+    "signInToAccount": "আপনার অ্যাকাউন্টে সাইন ইন করুন",
+    "pleaseSignIn": "অনুগ্রহ করে সাইন ইন করুন",
+    "signInRequired": "আপনার ইভেন্ট দেখতে অনুগ্রহ করে সাইন ইন করুন",
+    "signInToCreateEvents": "ইভেন্ট তৈরি বা সম্পাদনা করতে অনুগ্রহ করে সাইন ইন করুন",
+    "authenticationError": "প্রমাণীকরণ ত্রুটি",
+    "signedInAs": "সাইন ইন করেছেন"
+  },
+  "home": {
+    "title": "আনন্দে স্বাগতম",
+    "subtitle": "Google OAuth প্রমাণীকরণ সহ একটি Next.js অ্যাপ্লিকেশন",
+    "viewMyEvents": "আমার ইভেন্ট দেখুন",
+    "createEvent": "ইভেন্ট তৈরি করুন",
+    "features": {
+      "secure": {
+        "title": "নিরাপদ প্রমাণীকরণ",
+        "description": "নিরাপদ ব্যবহারকারী প্রমাণীকরণের জন্য Google OAuth ইন্টিগ্রেশন"
+      },
+      "modern": {
+        "title": "আধুনিক স্ট্যাক",
+        "description": "Next.js 15, TypeScript, এবং Tailwind CSS দিয়ে তৈরি"
+      },
+      "scalable": {
+        "title": "স্কেলেবল আর্কিটেকচার",
+        "description": "পরিষ্কার কোড আর্কিটেকচার সহ বৃদ্ধির জন্য ডিজাইন করা"
+      }
+    }
+  },
+  "events": {
+    "title": "ইভেন্ট",
+    "myEvents": "আমার ইভেন্ট",
+    "eventDetails": "ইভেন্টের বিস্তারিত",
+    "createEvent": "ইভেন্ট তৈরি করুন",
+    "editEvent": "ইভেন্ট সম্পাদনা",
+    "createNewEvent": "নতুন ইভেন্ট তৈরি করুন",
+    "noEventsFound": "কোন ইভেন্ট পাওয়া যায়নি",
+    "createFirstEvent": "আপনার প্রথম ইভেন্ট তৈরি করুন",
+    "eventNotFound": "ইভেন্ট পাওয়া যায়নি",
+    "eventTitle": "ইভেন্টের শিরোনাম",
+    "description": "বিবরণ",
+    "location": "অবস্থান",
+    "startDate": "শুরুর তারিখ ও সময়",
+    "endDate": "শেষের তারিখ ও সময়",
+    "maxCapacity": "সর্বোচ্চ ধারণক্ষমতা",
+    "capacity": "ধারণক্ষমতা",
+    "visibility": "ইভেন্টের দৃশ্যমানতা",
+    "categories": "বিভাগ",
+    "tags": "ট্যাগ",
+    "addTags": "ট্যাগ যোগ করুন (এন্টার চাপুন)",
+    "add": "যোগ করুন",
+    "participants": "অংশগ্রহণকারী",
+    "participant": "অংশগ্রহণকারী",
+    "eventCreator": "ইভেন্ট তৈরিকারী",
+    "createdOn": "তৈরি হয়েছে",
+    "joinedOn": "যোগ দিয়েছেন",
+    "createdEvents": "তৈরি করা ইভেন্ট",
+    "joinedEvents": "যোগদান করা ইভেন্ট",
+    "eventFull": "ইভেন্ট পূর্ণ",
+    "joinEvent": "ইভেন্টে যোগ দিন",
+    "leaveEvent": "ইভেন্ট ছেড়ে দিন",
+    "deleteEvent": "ইভেন্ট মুছুন",
+    "updateEvent": "ইভেন্ট আপডেট করুন",
+    "viewDetails": "বিস্তারিত দেখুন",
+    "joining": "যোগ দিচ্ছেন...",
+    "leaving": "ছেড়ে দিচ্ছেন...",
+    "deleting": "মুছে ফেলছেন...",
+    "saving": "সংরক্ষণ করছেন...",
+    "unlimited": "সীমাহীন",
+    "required": "আবশ্যক",
+    "optional": "ঐচ্ছিক",
+    "publicDescription": "সর্বজনীন - যে কেউ এই ইভেন্ট দেখতে এবং যোগ দিতে পারে",
+    "privateDescription": "ব্যক্তিগত - শুধুমাত্র লিংক সহ লোকেরা এই ইভেন্ট দেখতে পারে",
+    "unlimitedCapacity": "সীমাহীন ধারণক্ষমতার জন্য খালি রাখুন",
+    "dateTime": "তারিখ ও সময়",
+    "ends": "শেষ"
+  },
+  "forms": {
+    "validation": {
+      "titleRequired": "শিরোনাম আবশ্যক",
+      "startDateRequired": "শুরুর তারিখ আবশ্যক",
+      "endDateAfterStart": "শেষের তারিখ শুরুর তারিখের পরে হতে হবে",
+      "capacityMinimum": "ধারণক্ষমতা কমপক্ষে ১ হতে হবে"
+    },
+    "placeholders": {
+      "eventTitle": "ইভেন্টের শিরোনাম লিখুন",
+      "eventDescription": "আপনার ইভেন্টের বর্ণনা দিন...",
+      "eventLocation": "ইভেন্টের অবস্থান",
+      "unlimitedCapacity": "সীমাহীনের জন্য খালি রাখুন"
+    }
+  },
+  "messages": {
+    "confirmDelete": "আপনি কি নিশ্চিত যে এই ইভেন্টটি মুছে ফেলতে চান?",
+    "confirmDeletePermanent": "আপনি কি নিশ্চিত যে এই ইভেন্টটি মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+    "failedToJoin": "ইভেন্টে যোগ দিতে ব্যর্থ",
+    "failedToLeave": "ইভেন্ট ছেড়ে দিতে ব্যর্থ",
+    "failedToDelete": "ইভেন্ট মুছতে ব্যর্থ",
+    "failedToSave": "ইভেন্ট সংরক্ষণ করতে ব্যর্থ",
+    "failedToFetch": "ইভেন্ট আনতে ব্যর্থ",
+    "failedToFetchEvent": "ইভেন্ট আনতে ব্যর্থ",
+    "failedToFetchCategories": "বিভাগ আনতে ব্যর্থ",
+    "anErrorOccurred": "একটি ত্রুটি ঘটেছে"
+  },
+  "language": {
+    "selectLanguage": "ভাষা নির্বাচন করুন",
+    "english": "English",
+    "bangla": "বাংলা"
+  }
+}
