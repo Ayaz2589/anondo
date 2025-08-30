@@ -137,5 +137,23 @@
     "selectLanguage": "ভাষা নির্বাচন করুন",
     "english": "English",
     "bangla": "বাংলা"
+  },
+  "follow": {
+    "follow": "ফলো করুন",
+    "following": "ফলো করছেন",
+    "unfollow": "আনফলো করুন",
+    "followers": "ফলোয়ার",
+    "followersCount": "{{count}} ফলোয়ার",
+    "followingCount": "{{count}} ফলো করছেন",
+    "followUser": "{{name}} কে ফলো করুন",
+    "unfollowUser": "{{name}} কে আনফলো করুন",
+    "followingFeed": "ফলোয়িং ফিড",
+    "allEvents": "সব ইভেন্ট",
+    "discoverUsers": "ব্যবহারকারী খুঁজুন",
+    "searchUsers": "ব্যবহারকারী খুঁজুন...",
+    "noUsersFound": "কোন ব্যবহারকারী পাওয়া যায়নি",
+    "userProfile": "ব্যবহারকারীর প্রোফাইল",
+    "joinedOn": "যোগ দিয়েছেন {{date}}",
+    "eventsCreated": "{{count}} ইভেন্ট তৈরি করেছেন"
   }
 }

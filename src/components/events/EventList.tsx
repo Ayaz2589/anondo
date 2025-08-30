@@ -43,9 +43,14 @@ interface Event {
 interface EventListProps {
   type?: "created" | "joined" | "all";
   title?: string;
+  feed?: "all" | "following";
 }
 
-export function EventList({ type = "all", title }: EventListProps) {
+export function EventList({
+  type = "all",
+  title,
+  feed = "all",
+}: EventListProps) {
   const { data: session } = useSession();
   const { t } = useTranslation();
   const [events, setEvents] = useState<Event[]>([]);
@@ -59,7 +64,7 @@ export function EventList({ type = "all", title }: EventListProps) {
     if (session?.user?.id) {
       fetchUserEvents();
     }
-  }, [session?.user?.id, type]);
+  }, [session?.user?.id, type, feed]);
 
   const fetchUserEvents = async () => {
     try {
@@ -67,13 +72,24 @@ export function EventList({ type = "all", title }: EventListProps) {
       setError(null);
 
       if (type === "all") {
-        // Fetch both created and joined events
-        const response = await fetch(`/api/users/${session?.user?.id}/events`);
-        if (!response.ok) throw new Error(t("messages.failedToFetch"));
+        if (feed === "following") {
+          // Fetch events from followed users
+          const response = await fetch(`/api/events?feed=following&limit=20`);
+          if (!response.ok) throw new Error(t("messages.failedToFetch"));
 
-        const data = await response.json();
-        setCreatedEvents(data.created || []);
-        setJoinedEvents(data.joined || []);
+          const data = await response.json();
+          setEvents(data.events || []);
+        } else {
+          // Fetch both created and joined events
+          const response = await fetch(
+            `/api/users/${session?.user?.id}/events`
+          );
+          if (!response.ok) throw new Error(t("messages.failedToFetch"));
+
+          const data = await response.json();
+          setCreatedEvents(data.created || []);
+          setJoinedEvents(data.joined || []);
+        }
       } else {
         // Fetch specific type
         const response = await fetch(
@@ -271,6 +287,21 @@ export function EventList({ type = "all", title }: EventListProps) {
             ? renderEventGrid(createdEvents)
             : renderEventGrid(joinedEvents)}
         </div>
+      </div>
+    );
+  }
+
+  // For following feed, show as a simple list
+  if (feed === "following") {
+    return (
+      <div className="space-y-6">
+        {title && (
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+          </div>
+        )}
+
+        {renderEventGrid(events)}
       </div>
     );
   }

@@ -143,6 +143,7 @@ export class EventService {
       search?: string;
       startDateFrom?: Date;
       startDateTo?: Date;
+      creatorIds?: string[];
     }
   ): Promise<{ events: EventWithDetails[]; total: number }> {
     const skip = (page - 1) * limit;
@@ -176,6 +177,12 @@ export class EventService {
       where.startDate = {};
       if (filters.startDateFrom) where.startDate.gte = filters.startDateFrom;
       if (filters.startDateTo) where.startDate.lte = filters.startDateTo;
+    }
+
+    if (filters?.creatorIds && filters.creatorIds.length > 0) {
+      where.creatorId = {
+        in: filters.creatorIds
+      };
     }
 
     const [events, total] = await Promise.all([

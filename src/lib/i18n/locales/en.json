@@ -137,5 +137,23 @@
     "selectLanguage": "Select Language",
     "english": "English",
     "bangla": "বাংলা"
+  },
+  "follow": {
+    "follow": "Follow",
+    "following": "Following",
+    "unfollow": "Unfollow",
+    "followers": "Followers",
+    "followersCount": "{{count}} followers",
+    "followingCount": "{{count}} following",
+    "followUser": "Follow {{name}}",
+    "unfollowUser": "Unfollow {{name}}",
+    "followingFeed": "Following Feed",
+    "allEvents": "All Events",
+    "discoverUsers": "Discover Users",
+    "searchUsers": "Search users...",
+    "noUsersFound": "No users found",
+    "userProfile": "User Profile",
+    "joinedOn": "Joined {{date}}",
+    "eventsCreated": "{{count}} events created"
   }
 }

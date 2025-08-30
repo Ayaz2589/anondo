@@ -54,6 +54,12 @@ export default function Home() {
             >
               {t("home.createEvent")}
             </a>
+            <a
+              href="/discover"
+              className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors font-medium"
+            >
+              {t("follow.discoverUsers")}
+            </a>
           </div>
         </div>
 
