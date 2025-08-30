@@ -6,9 +6,21 @@ import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ImageCarousel from "./ImageCarousel";
 
 interface EventDetailsProps {
   eventId: string;
+}
+
+interface EventImage {
+  id: string;
+  url: string;
+  altText?: string;
+  caption?: string;
+  order: number;
+  width?: number;
+  height?: number;
+  createdAt: string;
 }
 
 interface EventWithDetails {
@@ -56,6 +68,7 @@ interface EventWithDetails {
   _count: {
     participants: number;
   };
+  images: EventImage[];
 }
 
 export function EventDetails({ eventId }: EventDetailsProps) {
@@ -76,16 +89,27 @@ export function EventDetails({ eventId }: EventDetailsProps) {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/events/${eventId}`);
-      if (!response.ok) {
-        if (response.status === 404) {
+      // Fetch event details
+      const eventResponse = await fetch(`/api/events/${eventId}`);
+      if (!eventResponse.ok) {
+        if (eventResponse.status === 404) {
           throw new Error(t("events.eventNotFound"));
         }
         throw new Error(t("messages.failedToFetchEvent"));
       }
 
-      const data = await response.json();
-      setEvent(data.event);
+      const eventData = await eventResponse.json();
+
+      // Fetch event images
+      const imagesResponse = await fetch(`/api/events/${eventId}/images`);
+      let images: EventImage[] = [];
+      if (imagesResponse.ok) {
+        const imagesData = await imagesResponse.json();
+        images = imagesData.images || [];
+      }
+
+      // Combine event data with images
+      setEvent({ ...eventData.event, images });
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -200,9 +224,9 @@ export function EventDetails({ eventId }: EventDetailsProps) {
     );
   }
 
-  const isCreator = session?.user?.id === event.creator.id;
+  const isCreator = (session?.user as any)?.id === event.creator.id;
   const isParticipant = event.participants.some(
-    (p) => p.user.id === session?.user?.id
+    (p) => p.user.id === (session?.user as any)?.id
   );
   const isFull = event.maxCapacity
     ? event._count.participants >= event.maxCapacity
@@ -265,6 +289,16 @@ export function EventDetails({ eventId }: EventDetailsProps) {
             <p className="text-gray-700 whitespace-pre-wrap">
               {event.description}
             </p>
+          </div>
+        )}
+
+        {/* Images */}
+        {event.images && event.images.length > 0 && (
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {t("events.images")}
+            </h3>
+            <ImageCarousel images={event.images} />
           </div>
         )}
 

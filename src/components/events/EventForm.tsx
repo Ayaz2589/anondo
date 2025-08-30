@@ -4,11 +4,23 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
+import ImageUpload from "./ImageUpload";
 
 interface Category {
   id: string;
   name: string;
   color: string | null;
+}
+
+interface EventImage {
+  id: string;
+  url: string;
+  altText?: string;
+  caption?: string;
+  order: number;
+  width?: number;
+  height?: number;
+  createdAt: string;
 }
 
 interface EventFormProps {
@@ -31,6 +43,7 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [images, setImages] = useState<EventImage[]>([]);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -54,7 +67,10 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+    if (eventId) {
+      fetchImages();
+    }
+  }, [eventId]);
 
   const fetchCategories = async () => {
     try {
@@ -65,6 +81,20 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
       }
     } catch (error) {
       console.error(t("messages.failedToFetchCategories"), error);
+    }
+  };
+
+  const fetchImages = async () => {
+    if (!eventId) return;
+
+    try {
+      const response = await fetch(`/api/events/${eventId}/images`);
+      if (response.ok) {
+        const data = await response.json();
+        setImages(data.images || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch images:", error);
     }
   };
 
@@ -453,6 +483,18 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
               </button>
             </div>
           </div>
+
+          {/* Images */}
+          {eventId && (
+            <div>
+              <ImageUpload
+                eventId={eventId}
+                images={images}
+                onImagesChange={setImages}
+                isOwner={true}
+              />
+            </div>
+          )}
 
           {/* Submit Buttons */}
           <div className="flex gap-4 pt-6 border-t border-gray-200">

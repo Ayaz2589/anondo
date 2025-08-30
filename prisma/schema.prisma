@@ -91,6 +91,7 @@ model Event {
   participants EventParticipant[]
   categories   EventCategory[]
   tags         EventTag[]
+  images       EventImage[]
 
   @@index([creatorId])
   @@index([startDate])
@@ -152,6 +153,25 @@ model EventTag {
   tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([eventId, tagId])
+}
+
+model EventImage {
+  id        String   @id @default(cuid())
+  url       String
+  altText   String?
+  caption   String?
+  order     Int      @default(0) // For ordering images in carousel
+  width     Int?
+  height    Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+  @@index([eventId, order]) // For efficient ordering queries
 }
 
 // Enums
