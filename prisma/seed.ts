@@ -208,18 +208,26 @@ async function main() {
 
   console.log('✅ Created dummy users:', dummyUsers.map(u => u.name));
 
-  // Create follow relationships
+  // Create follow relationships - Main user follows more people
   const followRelationships = [
+    // Others follow main user
     { followerId: dummyUsers[0].id, followingId: mainUser.id },
     { followerId: dummyUsers[1].id, followingId: mainUser.id },
     { followerId: dummyUsers[2].id, followingId: mainUser.id },
+    { followerId: dummyUsers[3].id, followingId: mainUser.id },
+    // Main user follows others (expanded)
     { followerId: mainUser.id, followingId: dummyUsers[0].id },
+    { followerId: mainUser.id, followingId: dummyUsers[1].id },
+    { followerId: mainUser.id, followingId: dummyUsers[2].id },
     { followerId: mainUser.id, followingId: dummyUsers[3].id },
     { followerId: mainUser.id, followingId: dummyUsers[4].id },
+    { followerId: mainUser.id, followingId: dummyUsers[5].id },
     // Cross-follows between dummy users
     { followerId: dummyUsers[0].id, followingId: dummyUsers[1].id },
     { followerId: dummyUsers[1].id, followingId: dummyUsers[2].id },
-    { followerId: dummyUsers[2].id, followingId: dummyUsers[3].id }
+    { followerId: dummyUsers[2].id, followingId: dummyUsers[3].id },
+    { followerId: dummyUsers[3].id, followingId: dummyUsers[4].id },
+    { followerId: dummyUsers[4].id, followingId: dummyUsers[5].id }
   ];
 
   for (const follow of followRelationships) {
@@ -343,9 +351,123 @@ async function main() {
     events.push(event);
   }
 
-  console.log('✅ Created events:', events.map(e => e.title));
+  console.log('✅ Created events for main user:', events.map(e => e.title));
 
-  // Add event participants
+  // Create events by other users
+  const otherUserEvents = [];
+  
+  const otherEventData = [
+    {
+      title: 'Morning Yoga Session',
+      description: 'Start your day with peaceful yoga practice in the park. All levels welcome!\n\nWhat we\'ll do:\n- Gentle warm-up stretches\n- Basic yoga poses\n- Breathing exercises\n- Meditation\n\nBring your own mat and water bottle.',
+      location: 'Ramna Park, Dhaka',
+      startDate: new Date('2024-02-18T06:30:00Z'),
+      endDate: new Date('2024-02-18T07:30:00Z'),
+      maxCapacity: 20,
+      isPublic: true,
+      status: 'ACTIVE',
+      creatorId: dummyUsers[0].id, // John Doe
+      categoryIds: [categories[1].id], // Sports
+      tagIds: [tags[2].id, tags[4].id, tags[1].id] // free, outdoor, beginner-friendly
+    },
+    {
+      title: 'Digital Marketing Workshop',
+      description: 'Learn the fundamentals of digital marketing for small businesses and startups.\n\nTopics covered:\n- Social media marketing\n- Google Ads basics\n- Email marketing\n- Analytics and tracking\n- Content creation tips\n\nPerfect for entrepreneurs and marketing beginners.',
+      location: 'Business Hub, Gulshan',
+      startDate: new Date('2024-02-22T14:00:00Z'),
+      endDate: new Date('2024-02-22T17:00:00Z'),
+      maxCapacity: 25,
+      isPublic: true,
+      status: 'ACTIVE',
+      creatorId: dummyUsers[1].id, // Jane Smith
+      categoryIds: [categories[0].id, categories[3].id], // Technology, Education
+      tagIds: [tags[3].id, tags[0].id] // workshop, networking
+    },
+    {
+      title: 'Weekend Book Club Meeting',
+      description: 'Join our monthly book club discussion! This month we\'re reading "The Alchemist" by Paulo Coelho.\n\nWhat to expect:\n- Group discussion about the book\n- Character analysis\n- Theme exploration\n- Next book selection\n- Tea and snacks provided\n\nPlease read the book before attending.',
+      location: 'Cafe Literati, Dhanmondi',
+      startDate: new Date('2024-02-24T15:00:00Z'),
+      endDate: new Date('2024-02-24T17:00:00Z'),
+      maxCapacity: 15,
+      isPublic: true,
+      status: 'ACTIVE',
+      creatorId: dummyUsers[2].id, // Mike Wilson
+      categoryIds: [categories[5].id], // Arts & Culture
+      tagIds: [tags[2].id] // free
+    },
+    {
+      title: 'Healthy Cooking Workshop',
+      description: 'Learn to prepare nutritious and delicious meals that fit your busy lifestyle.\n\nMenu for today:\n- Quinoa Buddha Bowl\n- Green smoothie variations\n- Overnight oats\n- Healthy snack options\n\nAll ingredients provided. Take home recipe cards and meal prep tips!',
+      location: 'Cooking Studio, Uttara',
+      startDate: new Date('2024-02-28T10:00:00Z'),
+      endDate: new Date('2024-02-28T13:00:00Z'),
+      maxCapacity: 12,
+      isPublic: true,
+      status: 'ACTIVE',
+      creatorId: dummyUsers[3].id, // Sarah Johnson
+      categoryIds: [categories[4].id], // Food & Drink
+      tagIds: [tags[3].id, tags[1].id] // workshop, beginner-friendly
+    },
+    {
+      title: 'Freelancer Meetup & Networking',
+      description: 'Connect with fellow freelancers, share experiences, and build your professional network.\n\nAgenda:\n- Welcome & introductions\n- Panel discussion: "Scaling Your Freelance Business"\n- Networking session\n- Resource sharing\n- Q&A with experienced freelancers\n\nBring your business cards!',
+      location: 'Co-working Space, Banani',
+      startDate: new Date('2024-03-02T18:30:00Z'),
+      endDate: new Date('2024-03-02T21:00:00Z'),
+      maxCapacity: 40,
+      isPublic: true,
+      status: 'ACTIVE',
+      creatorId: dummyUsers[4].id, // Alex Brown
+      categoryIds: [categories[2].id], // Social
+      tagIds: [tags[0].id, tags[2].id] // networking, free
+    },
+    {
+      title: 'Weekend Hiking Adventure',
+      description: 'Explore the beautiful trails around Dhaka with fellow hiking enthusiasts!\n\nDetails:\n- Moderate difficulty level\n- 5km trail with scenic views\n- Professional guide included\n- Safety equipment provided\n- Lunch and refreshments included\n\nWear comfortable hiking shoes and bring a backpack.',
+      location: 'Savar Hills, Dhaka',
+      startDate: new Date('2024-03-09T07:00:00Z'),
+      endDate: new Date('2024-03-09T15:00:00Z'),
+      maxCapacity: 18,
+      isPublic: true,
+      status: 'ACTIVE',
+      creatorId: dummyUsers[5].id, // Lisa Davis
+      categoryIds: [categories[1].id], // Sports
+      tagIds: [tags[4].id] // outdoor
+    }
+  ];
+
+  for (let i = 0; i < otherEventData.length; i++) {
+    const data = otherEventData[i];
+    const event = await prisma.event.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        location: data.location,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        maxCapacity: data.maxCapacity,
+        isPublic: data.isPublic,
+        status: data.status,
+        creatorId: data.creatorId,
+        categories: {
+          create: data.categoryIds.map(categoryId => ({
+            categoryId
+          }))
+        },
+        tags: {
+          create: data.tagIds.map(tagId => ({
+            tagId
+          }))
+        }
+      }
+    });
+    otherUserEvents.push(event);
+  }
+
+  console.log('✅ Created events by other users:', otherUserEvents.map(e => e.title));
+
+  // Add event participants for main user's events
   const participantData = [
     { eventIndex: 0, userIds: [dummyUsers[0].id, dummyUsers[1].id, dummyUsers[2].id, dummyUsers[3].id] },
     { eventIndex: 1, userIds: [dummyUsers[1].id, dummyUsers[2].id, dummyUsers[4].id] },
@@ -368,11 +490,35 @@ async function main() {
     }
   }
 
+  // Add participants to other users' events (including main user joining some)
+  const otherEventParticipants = [
+    { eventIndex: 0, userIds: [mainUser.id, dummyUsers[1].id, dummyUsers[2].id, dummyUsers[3].id] }, // Yoga - Main user joins
+    { eventIndex: 1, userIds: [mainUser.id, dummyUsers[0].id, dummyUsers[2].id, dummyUsers[4].id] }, // Marketing - Main user joins
+    { eventIndex: 2, userIds: [dummyUsers[0].id, dummyUsers[3].id, dummyUsers[4].id] }, // Book Club - Main user doesn't join
+    { eventIndex: 3, userIds: [mainUser.id, dummyUsers[1].id, dummyUsers[4].id, dummyUsers[5].id] }, // Cooking - Main user joins
+    { eventIndex: 4, userIds: [dummyUsers[0].id, dummyUsers[1].id, dummyUsers[2].id, dummyUsers[3].id] }, // Freelancer - Main user doesn't join
+    { eventIndex: 5, userIds: [mainUser.id, dummyUsers[0].id, dummyUsers[1].id, dummyUsers[3].id] } // Hiking - Main user joins
+  ];
+
+  for (const { eventIndex, userIds } of otherEventParticipants) {
+    for (const userId of userIds) {
+      await prisma.eventParticipant.create({
+        data: {
+          eventId: otherUserEvents[eventIndex].id,
+          userId,
+          status: 'JOINED',
+          joinedAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000) // Random time in last 7 days
+        }
+      });
+    }
+  }
+
   console.log('✅ Added event participants');
 
-  // Add images to events
-  for (let i = 0; i < events.length; i++) {
-    const event = events[i];
+  // Add images to all events (main user's events and other users' events)
+  const allEvents = [...events, ...otherUserEvents];
+  for (let i = 0; i < allEvents.length; i++) {
+    const event = allEvents[i];
     const imageCount = Math.floor(Math.random() * 4) + 2; // 2-5 images per event
     
     for (let j = 0; j < imageCount; j++) {
@@ -391,7 +537,7 @@ async function main() {
     }
   }
 
-  console.log('✅ Added event images');
+  console.log('✅ Added event images to all events');
 
   // Add comments to events
   const commentTexts = [
@@ -412,12 +558,15 @@ async function main() {
     "Looking forward to the networking opportunities!"
   ];
 
-  for (let i = 0; i < events.length; i++) {
-    const event = events[i];
+  // Add comments to all events (including main user commenting on others' events)
+  const allUsers = [mainUser, ...dummyUsers];
+  
+  for (let i = 0; i < allEvents.length; i++) {
+    const event = allEvents[i];
     const commentCount = Math.floor(Math.random() * 8) + 3; // 3-10 comments per event
     
     for (let j = 0; j < commentCount; j++) {
-      const randomUser = dummyUsers[Math.floor(Math.random() * dummyUsers.length)];
+      const randomUser = allUsers[Math.floor(Math.random() * allUsers.length)];
       const randomText = commentTexts[Math.floor(Math.random() * commentTexts.length)];
       
       const comment = await prisma.comment.create({
@@ -429,9 +578,9 @@ async function main() {
         }
       });
 
-      // Add random likes to comments
+      // Add random likes to comments (including main user liking comments)
       const likeCount = Math.floor(Math.random() * 4); // 0-3 likes per comment
-      const likers = dummyUsers.slice(0, likeCount);
+      const likers = allUsers.slice(0, likeCount);
       
       for (const liker of likers) {
         if (liker.id !== randomUser.id) { // Don't let users like their own comments
@@ -455,13 +604,17 @@ async function main() {
 - Categories: ${categories.length}
 - Tags: ${tags.length}
 - Users: ${dummyUsers.length + 1} (including main user)
-- Events: ${events.length}
+- Events: ${allEvents.length} (${events.length} by main user + ${otherUserEvents.length} by others)
 - Follow relationships: ${followRelationships.length}
-- Images: ~${events.length * 3} (2-5 per event)
-- Comments: ~${events.length * 6} (3-10 per event)
+- Images: ~${allEvents.length * 3} (2-5 per event)
+- Comments: ~${allEvents.length * 6} (3-10 per event)
 - Comment likes: Various per comment
 
 🎯 Main user: ${mainUser.name} (${mainUser.email})
+- Follows: ${followRelationships.filter(f => f.followerId === mainUser.id).length} users
+- Followers: ${followRelationships.filter(f => f.followingId === mainUser.id).length} users
+- Created events: ${events.length}
+- Joined events: 4 (Yoga, Marketing, Cooking, Hiking)
   `);
 }
 
