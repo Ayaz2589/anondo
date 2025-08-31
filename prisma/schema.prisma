@@ -74,15 +74,20 @@ model VerificationToken {
 
 // Event Management System
 model Event {
-  id          String      @id @default(cuid())
-  title       String
-  description String?     @db.Text
-  location    String?
-  startDate   DateTime
-  endDate     DateTime?
-  maxCapacity Int? // null = unlimited
-  isPublic    Boolean     @default(true)
-  status      EventStatus @default(ACTIVE)
+  id              String      @id @default(cuid())
+  title           String
+  description     String?     @db.Text
+  location        String? // Legacy field for backward compatibility
+  locationName    String? // Human-readable location name
+  locationAddress String? // Full formatted address from Google Places
+  locationLat     Float? // Latitude
+  locationLng     Float? // Longitude
+  locationPlaceId String? // Google Places ID for future reference
+  startDate       DateTime
+  endDate         DateTime?
+  maxCapacity     Int? // null = unlimited
+  isPublic        Boolean     @default(true)
+  status          EventStatus @default(ACTIVE)
 
   // Metadata
   createdAt DateTime @default(now())

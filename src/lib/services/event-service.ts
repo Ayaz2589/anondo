@@ -5,6 +5,11 @@ export interface CreateEventData {
   title: string;
   description?: string;
   location?: string;
+  locationName?: string;
+  locationAddress?: string;
+  locationLat?: number;
+  locationLng?: number;
+  locationPlaceId?: string;
   startDate: Date;
   endDate?: Date;
   maxCapacity?: number;
@@ -17,6 +22,11 @@ export interface UpdateEventData {
   title?: string;
   description?: string;
   location?: string;
+  locationName?: string;
+  locationAddress?: string;
+  locationLat?: number;
+  locationLng?: number;
+  locationPlaceId?: string;
   startDate?: Date;
   endDate?: Date;
   maxCapacity?: number;

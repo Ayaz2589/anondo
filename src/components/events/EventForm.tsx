@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import ImageUpload from "./ImageUpload";
+import GooglePlacesAutocomplete from "./GooglePlacesAutocomplete";
+import GoogleMapPreview from "./GoogleMapPreview";
 
 interface Category {
   id: string;
@@ -29,6 +31,11 @@ interface EventFormProps {
     title: string;
     description: string | null;
     location: string | null;
+    locationName: string | null;
+    locationAddress: string | null;
+    locationLat: number | null;
+    locationLng: number | null;
+    locationPlaceId: string | null;
     startDate: string;
     endDate: string | null;
     maxCapacity: number | null;
@@ -50,6 +57,11 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
     title: initialData?.title || "",
     description: initialData?.description || "",
     location: initialData?.location || "",
+    locationName: initialData?.locationName || "",
+    locationAddress: initialData?.locationAddress || "",
+    locationLat: initialData?.locationLat || null,
+    locationLng: initialData?.locationLng || null,
+    locationPlaceId: initialData?.locationPlaceId || "",
     startDate: initialData?.startDate
       ? new Date(initialData.startDate).toISOString().slice(0, 16)
       : "",
@@ -64,6 +76,25 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
 
   const [tagInput, setTagInput] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Handle place selection from Google Places Autocomplete
+  const handlePlaceSelect = (place: {
+    name: string;
+    address: string;
+    lat: number;
+    lng: number;
+    placeId: string;
+  }) => {
+    setFormData((prev) => ({
+      ...prev,
+      locationName: place.name,
+      locationAddress: place.address,
+      locationLat: place.lat,
+      locationLng: place.lng,
+      locationPlaceId: place.placeId,
+      location: place.address, // Keep legacy field for backward compatibility
+    }));
+  };
 
   useEffect(() => {
     fetchCategories();
@@ -137,6 +168,11 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
         title: formData.title.trim(),
         description: formData.description.trim() || null,
         location: formData.location.trim() || null,
+        locationName: formData.locationName?.trim() || null,
+        locationAddress: formData.locationAddress?.trim() || null,
+        locationLat: formData.locationLat,
+        locationLng: formData.locationLng,
+        locationPlaceId: formData.locationPlaceId?.trim() || null,
         startDate: formData.startDate,
         endDate: formData.endDate || null,
         maxCapacity: formData.maxCapacity
@@ -280,16 +316,24 @@ export function EventForm({ eventId, initialData }: EventFormProps) {
             >
               {t("events.location")}
             </label>
-            <input
-              type="text"
-              id="location"
-              value={formData.location}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, location: e.target.value }))
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <GooglePlacesAutocomplete
+              onPlaceSelect={handlePlaceSelect}
               placeholder={t("forms.placeholders.eventLocation")}
+              defaultValue={formData.locationAddress || formData.location}
             />
+
+            {/* Show map preview if location is selected */}
+            {formData.locationLat && formData.locationLng && (
+              <div className="mt-3">
+                <GoogleMapPreview
+                  lat={formData.locationLat}
+                  lng={formData.locationLng}
+                  address={formData.locationAddress || formData.location}
+                  locationName={formData.locationName}
+                  height="150px"
+                />
+              </div>
+            )}
           </div>
 
           {/* Date & Time */}

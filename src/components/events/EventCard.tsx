@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
+import ClickableAddress from "./ClickableAddress";
 
 interface EventCardProps {
   event: {
@@ -12,6 +13,11 @@ interface EventCardProps {
     title: string;
     description: string | null;
     location: string | null;
+    locationName: string | null;
+    locationAddress: string | null;
+    locationLat: number | null;
+    locationLng: number | null;
+    locationPlaceId: string | null;
     startDate: string;
     endDate: string | null;
     maxCapacity: number | null;
@@ -58,9 +64,9 @@ export function EventCard({
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
-  const isCreator = session?.user?.id === event.creator.id;
+  const isCreator = (session?.user as any)?.id === event.creator.id;
   const isParticipant = event.participants.some(
-    (p) => p.user.id === session?.user?.id
+    (p) => p.user.id === (session?.user as any)?.id
   );
   const isFull = event.maxCapacity
     ? event._count.participants >= event.maxCapacity
@@ -174,28 +180,16 @@ export function EventCard({
           )}
         </div>
 
-        {event.location && (
-          <div className="flex items-center text-sm text-gray-500">
-            <svg
-              className="w-4 h-4 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            <span>{event.location}</span>
+        {(event.locationAddress || event.location) && (
+          <div className="text-sm">
+            <ClickableAddress
+              address={event.locationAddress || event.location || ""}
+              locationName={event.locationName || undefined}
+              lat={event.locationLat || undefined}
+              lng={event.locationLng || undefined}
+              className="text-gray-500 hover:text-blue-600"
+              showExternalIcon={false}
+            />
           </div>
         )}
 

@@ -8,6 +8,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ImageCarousel from "./ImageCarousel";
 import CommentSection from "./CommentSection";
+import ClickableAddress from "./ClickableAddress";
+import GoogleMapPreview from "./GoogleMapPreview";
 
 interface EventDetailsProps {
   eventId: string;
@@ -29,6 +31,11 @@ interface EventWithDetails {
   title: string;
   description: string | null;
   location: string | null;
+  locationName: string | null;
+  locationAddress: string | null;
+  locationLat: number | null;
+  locationLng: number | null;
+  locationPlaceId: string | null;
   startDate: string;
   endDate: string | null;
   maxCapacity: number | null;
@@ -335,33 +342,34 @@ export function EventDetails({ eventId }: EventDetailsProps) {
               </div>
             </div>
 
-            {event.location && (
+            {(event.locationAddress || event.location) && (
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">
                   {t("events.location")}
                 </h4>
-                <div className="flex items-center text-gray-600">
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  <p>{event.location}</p>
+
+                {/* Clickable Address */}
+                <div className="mb-3">
+                  <ClickableAddress
+                    address={event.locationAddress || event.location || ""}
+                    locationName={event.locationName || undefined}
+                    lat={event.locationLat || undefined}
+                    lng={event.locationLng || undefined}
+                  />
                 </div>
+
+                {/* Map Preview */}
+                {event.locationLat && event.locationLng && (
+                  <div className="mt-3">
+                    <GoogleMapPreview
+                      lat={event.locationLat}
+                      lng={event.locationLng}
+                      address={event.locationAddress || event.location || ""}
+                      locationName={event.locationName || undefined}
+                      height="200px"
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>
