@@ -155,7 +155,7 @@ async function main() {
       update: {},
       create: {
         email: 'john.doe@example.com',
-        name: 'John Doe',
+        name: 'জন দাস',
         image: 'https://placehold.co/100x100/10B981/FFFFFF?text=JD'
       }
     }),
@@ -164,7 +164,7 @@ async function main() {
       update: {},
       create: {
         email: 'jane.smith@example.com',
-        name: 'Jane Smith',
+        name: 'জেনিফার শর্মা',
         image: 'https://placehold.co/100x100/F59E0B/FFFFFF?text=JS'
       }
     }),
@@ -173,7 +173,7 @@ async function main() {
       update: {},
       create: {
         email: 'mike.wilson@example.com',
-        name: 'Mike Wilson',
+        name: 'মাইকেল ওয়াহিদ',
         image: 'https://placehold.co/100x100/EF4444/FFFFFF?text=MW'
       }
     }),
@@ -182,7 +182,7 @@ async function main() {
       update: {},
       create: {
         email: 'sarah.johnson@example.com',
-        name: 'Sarah Johnson',
+        name: 'সারা জাহান',
         image: 'https://placehold.co/100x100/8B5CF6/FFFFFF?text=SJ'
       }
     }),
@@ -191,7 +191,7 @@ async function main() {
       update: {},
       create: {
         email: 'alex.brown@example.com',
-        name: 'Alex Brown',
+        name: 'আলেক্স বিশ্বাস',
         image: 'https://placehold.co/100x100/EC4899/FFFFFF?text=AB'
       }
     }),
@@ -200,7 +200,7 @@ async function main() {
       update: {},
       create: {
         email: 'lisa.davis@example.com',
-        name: 'Lisa Davis',
+        name: 'লিসা দত্ত',
         image: 'https://placehold.co/100x100/06B6D4/FFFFFF?text=LD'
       }
     })
@@ -250,10 +250,10 @@ async function main() {
   
   const eventData = [
     {
-      title: 'React & Next.js Workshop',
-      description: 'Learn modern React development with Next.js 15. We\'ll cover server components, app router, and best practices for building scalable applications.\n\nWhat you\'ll learn:\n- Next.js App Router\n- Server Components vs Client Components\n- Data fetching patterns\n- Deployment strategies\n\nBring your laptop and be ready to code!',
-      location: 'Tech Hub, Dhaka',
-      locationName: 'Tech Hub',
+      title: 'রিয়েক্ট ও নেক্সট.জেএস ওয়ার্কশপ',
+      description: 'নেক্সট.জেএস ১৫ দিয়ে আধুনিক রিয়েক্ট ডেভেলপমেন্ট শিখুন। আমরা সার্ভার কম্পোনেন্ট, অ্যাপ রাউটার এবং স্কেলেবল অ্যাপ্লিকেশন তৈরির সেরা পদ্ধতি নিয়ে আলোচনা করব।\n\nআপনি যা শিখবেন:\n- নেক্সট.জেএস অ্যাপ রাউটার\n- সার্ভার কম্পোনেন্ট বনাম ক্লায়েন্ট কম্পোনেন্ট\n- ডেটা ফেচিং প্যাটার্ন\n- ডিপ্লয়মেন্ট কৌশল\n\nআপনার ল্যাপটপ নিয়ে আসুন এবং কোডিংয়ের জন্য প্রস্তুত থাকুন!',
+      location: 'টেক হাব, ঢাকা',
+      locationName: 'টেক হাব',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -267,10 +267,10 @@ async function main() {
       tagIds: [tags[0].id, tags[1].id, tags[3].id] // networking, beginner-friendly, workshop
     },
     {
-      title: 'Community Football Match',
-      description: 'Join us for a friendly football match at the local stadium. All skill levels welcome!\n\nWhat to bring:\n- Sports shoes\n- Water bottle\n- Positive attitude\n\nWe\'ll provide the ball and organize teams on the spot.',
-      location: 'Dhanmondi Stadium, Dhaka',
-      locationName: 'Dhanmondi Stadium',
+      title: 'কমিউনিটি ফুটবল ম্যাচ',
+      description: 'স্থানীয় স্টেডিয়ামে বন্ধুত্বপূর্ণ ফুটবল ম্যাচে আমাদের সাথে যোগ দিন। সব দক্ষতার স্তরের খেলোয়াড়রা স্বাগতম!\n\nকী আনবেন:\n- খেলার জুতা\n- পানির বোতল\n- ইতিবাচক মনোভাব\n\nআমরা বল সরবরাহ করব এবং ঘটনাস্থলেই দল গঠন করব।',
+      location: 'ধানমন্ডি স্টেডিয়াম, ঢাকা',
+      locationName: 'ধানমন্ডি স্টেডিয়াম',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -284,10 +284,10 @@ async function main() {
       tagIds: [tags[2].id, tags[4].id] // free, outdoor
     },
     {
-      title: 'Startup Networking Evening',
-      description: 'Connect with fellow entrepreneurs, investors, and startup enthusiasts. Share ideas, find co-founders, and build meaningful connections.\n\nAgenda:\n- Welcome drinks (6:00-6:30 PM)\n- Lightning pitches (6:30-7:30 PM)\n- Networking session (7:30-9:00 PM)\n- Closing remarks\n\nDress code: Business casual',
-      location: 'Gulshan Business Club',
-      locationName: 'Gulshan Business Club',
+      title: 'স্টার্টআপ নেটওয়ার্কিং সন্ধ্যা',
+      description: 'সহ উদ্যোক্তা, বিনিয়োগকারী এবং স্টার্টআপ উৎসাহীদের সাথে সংযোগ স্থাপন করুন। ধারণা ভাগাভাগি করুন, সহ-প্রতিষ্ঠাতা খুঁজুন এবং অর্থবহ সংযোগ তৈরি করুন।\n\nকর্মসূচি:\n- স্বাগত পানীয় (সন্ধ্যা ৬:০০-৬:৩০)\n- দ্রুত উপস্থাপনা (সন্ধ্যা ৬:৩০-৭:৩০)\n- নেটওয়ার্কিং সেশন (সন্ধ্যা ৭:৩০-৯:০০)\n- সমাপনী বক্তব্য\n\nপোশাক: ব্যবসায়িক নৈমিত্তিক',
+      location: 'গুলশান বিজনেস ক্লাব',
+      locationName: 'গুলশান বিজনেস ক্লাব',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -301,10 +301,10 @@ async function main() {
       tagIds: [tags[0].id, tags[5].id] // networking, premium
     },
     {
-      title: 'Photography Masterclass',
-      description: 'Master the art of photography with professional photographer Sarah Ahmed. Learn composition, lighting, and post-processing techniques.\n\nTopics covered:\n- Camera settings and manual mode\n- Composition rules and creative techniques\n- Natural lighting vs artificial lighting\n- Basic photo editing in Lightroom\n\nCamera required (DSLR or mirrorless preferred)',
-      location: 'Creative Arts Center, Uttara',
-      locationName: 'Creative Arts Center',
+      title: 'ফটোগ্রাফি মাস্টারক্লাস',
+      description: 'পেশাদার ফটোগ্রাফার সারা আহমেদের সাথে ফটোগ্রাফির শিল্পে দক্ষতা অর্জন করুন। কম্পোজিশন, আলো এবং পোস্ট-প্রসেসিং কৌশল শিখুন।\n\nআলোচিত বিষয়:\n- ক্যামেরা সেটিংস এবং ম্যানুয়াল মোড\n- কম্পোজিশনের নিয়ম এবং সৃজনশীল কৌশল\n- প্রাকৃতিক আলো বনাম কৃত্রিম আলো\n- লাইটরুমে মৌলিক ছবি সম্পাদনা\n\nক্যামেরা প্রয়োজন (DSLR বা মিররলেস পছন্দনীয়)',
+      location: 'ক্রিয়েটিভ আর্টস সেন্টার, উত্তরা',
+      locationName: 'ক্রিয়েটিভ আর্টস সেন্টার',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -318,10 +318,10 @@ async function main() {
       tagIds: [tags[3].id, tags[1].id] // workshop, beginner-friendly
     },
     {
-      title: 'Bengali Cuisine Cooking Class',
-      description: 'Learn to cook authentic Bengali dishes with Chef Rahman. We\'ll prepare a full traditional meal together.\n\nMenu:\n- Hilsa fish curry\n- Bhapa rice\n- Aloo posto\n- Mishti doi\n\nAll ingredients and equipment provided. Take home recipe cards!',
-      location: 'Culinary Institute, Dhanmondi',
-      locationName: 'Culinary Institute',
+      title: 'বাঙালি রান্নার ক্লাস',
+      description: 'শেফ রহমানের সাথে খাঁটি বাঙালি খাবার রান্না করতে শিখুন। আমরা একসাথে একটি সম্পূর্ণ ঐতিহ্যবাহী খাবার প্রস্তুত করব।\n\nমেনু:\n- ইলিশ মাছের ঝোল\n- ভাপা ভাত\n- আলু পোস্ত\n- মিষ্টি দই\n\nসব উপকরণ এবং সরঞ্জাম সরবরাহ করা হবে। রেসিপি কার্ড নিয়ে যান!',
+      location: 'কুলিনারি ইনস্টিটিউট, ধানমন্ডি',
+      locationName: 'কুলিনারি ইনস্টিটিউট',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -335,10 +335,10 @@ async function main() {
       tagIds: [tags[3].id] // workshop
     },
     {
-      title: 'AI & Machine Learning Seminar',
-      description: 'Explore the latest trends in AI and ML with industry experts. Perfect for developers, data scientists, and tech enthusiasts.\n\nSpeakers:\n- Dr. Rashid Ahmed (AI Researcher, BUET)\n- Fatima Khan (ML Engineer, Google)\n- Mahmud Hassan (Data Scientist, Pathao)\n\nTopics:\n- Current state of AI in Bangladesh\n- Career opportunities in ML\n- Hands-on demo with TensorFlow\n- Q&A session',
-      location: 'BUET Auditorium',
-      locationName: 'BUET Auditorium',
+      title: 'কৃত্রিম বুদ্ধিমত্তা ও মেশিন লার্নিং সেমিনার',
+      description: 'ইন্ডাস্ট্রি বিশেষজ্ঞদের সাথে AI এবং ML এর সর্বশেষ ট্রেন্ড অন্বেষণ করুন। ডেভেলপার, ডেটা সাইন্টিস্ট এবং প্রযুক্তি উৎসাহীদের জন্য উপযুক্ত।\n\nবক্তাগণ:\n- ড. রশিদ আহমেদ (AI গবেষক, বুয়েট)\n- ফাতিমা খান (ML ইঞ্জিনিয়ার, গুগল)\n- মাহমুদ হাসান (ডেটা সাইন্টিস্ট, পাঠাও)\n\nবিষয়সমূহ:\n- বাংলাদেশে AI এর বর্তমান অবস্থা\n- ML এ ক্যারিয়ারের সুযোগ\n- TensorFlow দিয়ে হ্যান্ডস-অন ডেমো\n- প্রশ্নোত্তর পর্ব',
+      location: 'বুয়েট অডিটোরিয়াম',
+      locationName: 'বুয়েট অডিটোরিয়াম',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -393,10 +393,10 @@ async function main() {
   
   const otherEventData = [
     {
-      title: 'Morning Yoga Session',
-      description: 'Start your day with peaceful yoga practice in the park. All levels welcome!\n\nWhat we\'ll do:\n- Gentle warm-up stretches\n- Basic yoga poses\n- Breathing exercises\n- Meditation\n\nBring your own mat and water bottle.',
-      location: 'Ramna Park, Dhaka',
-      locationName: 'Ramna Park',
+      title: 'সকালের যোগা সেশন',
+      description: 'পার্কে শান্তিপূর্ণ যোগা অভ্যাসের মাধ্যমে আপনার দিন শুরু করুন। সব স্তরের অংশগ্রহণকারীরা স্বাগতম!\n\nআমরা যা করব:\n- মৃদু ওয়ার্ম-আপ স্ট্রেচ\n- মৌলিক যোগাসন\n- শ্বাসপ্রশ্বাসের অনুশীলন\n- ধ্যান\n\nআপনার নিজস্ব ম্যাট এবং পানির বোতল নিয়ে আসুন।',
+      location: 'রমনা পার্ক, ঢাকা',
+      locationName: 'রমনা পার্ক',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -411,10 +411,10 @@ async function main() {
       tagIds: [tags[2].id, tags[4].id, tags[1].id] // free, outdoor, beginner-friendly
     },
     {
-      title: 'Digital Marketing Workshop',
-      description: 'Learn the fundamentals of digital marketing for small businesses and startups.\n\nTopics covered:\n- Social media marketing\n- Google Ads basics\n- Email marketing\n- Analytics and tracking\n- Content creation tips\n\nPerfect for entrepreneurs and marketing beginners.',
-      location: 'Business Hub, Gulshan',
-      locationName: 'Business Hub',
+      title: 'ডিজিটাল মার্কেটিং ওয়ার্কশপ',
+      description: 'ছোট ব্যবসা এবং স্টার্টআপের জন্য ডিজিটাল মার্কেটিংয়ের মৌলিক বিষয়গুলি শিখুন।\n\nআলোচিত বিষয়:\n- সোশ্যাল মিডিয়া মার্কেটিং\n- গুগল অ্যাডসের মৌলিক বিষয়\n- ইমেইল মার্কেটিং\n- অ্যানালিটিক্স এবং ট্র্যাকিং\n- কন্টেন্ট তৈরির টিপস\n\nউদ্যোক্তা এবং মার্কেটিং শুরুকারীদের জন্য উপযুক্ত।',
+      location: 'বিজনেস হাব, গুলশান',
+      locationName: 'বিজনেস হাব',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -429,10 +429,10 @@ async function main() {
       tagIds: [tags[3].id, tags[0].id] // workshop, networking
     },
     {
-      title: 'Weekend Book Club Meeting',
-      description: 'Join our monthly book club discussion! This month we\'re reading "The Alchemist" by Paulo Coelho.\n\nWhat to expect:\n- Group discussion about the book\n- Character analysis\n- Theme exploration\n- Next book selection\n- Tea and snacks provided\n\nPlease read the book before attending.',
-      location: 'Cafe Literati, Dhanmondi',
-      locationName: 'Cafe Literati',
+      title: 'সাপ্তাহিক বই ক্লাব মিটিং',
+      description: 'আমাদের মাসিক বই ক্লাব আলোচনায় যোগ দিন! এই মাসে আমরা পাউলো কোয়েলহোর "দ্য অ্যালকেমিস্ট" পড়ছি।\n\nকী আশা করতে পারেন:\n- বই নিয়ে দলগত আলোচনা\n- চরিত্র বিশ্লেষণ\n- থিম অন্বেষণ\n- পরবর্তী বই নির্বাচন\n- চা এবং নাস্তা সরবরাহ\n\nঅনুগ্রহ করে অংশগ্রহণের আগে বইটি পড়ে আসুন।',
+      location: 'ক্যাফে লিটেরাটি, ধানমন্ডি',
+      locationName: 'ক্যাফে লিটেরাটি',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -447,10 +447,10 @@ async function main() {
       tagIds: [tags[2].id] // free
     },
     {
-      title: 'Healthy Cooking Workshop',
-      description: 'Learn to prepare nutritious and delicious meals that fit your busy lifestyle.\n\nMenu for today:\n- Quinoa Buddha Bowl\n- Green smoothie variations\n- Overnight oats\n- Healthy snack options\n\nAll ingredients provided. Take home recipe cards and meal prep tips!',
-      location: 'Cooking Studio, Uttara',
-      locationName: 'Cooking Studio',
+      title: 'সুস্বাস্থ্যকর রান্নার ওয়ার্কশপ',
+      description: 'আপনার ব্যস্ত জীবনযাত্রার সাথে মানানসই পুষ্টিকর এবং স্বাদিষ্ট খাবার প্রস্তুত করতে শিখুন।\n\nআজকের মেনু:\n- কিনোয়া বুদ্ধ বোউল\n- সবুজ স্মুদির বিভিন্ন রেসিপি\n- ওভারনাইট ওটস\n- সুস্বাস্থ্যকর স্ন্যাক্স অপশন\n\nসব উপকরণ সরবরাহ করা হবে। রেসিপি কার্ড এবং মিল প্রেপ টিপস নিয়ে যান!',
+      location: 'কুকিং স্টুডিও, উত্তরা',
+      locationName: 'কুকিং স্টুডিও',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -465,10 +465,10 @@ async function main() {
       tagIds: [tags[3].id, tags[1].id] // workshop, beginner-friendly
     },
     {
-      title: 'Freelancer Meetup & Networking',
-      description: 'Connect with fellow freelancers, share experiences, and build your professional network.\n\nAgenda:\n- Welcome & introductions\n- Panel discussion: "Scaling Your Freelance Business"\n- Networking session\n- Resource sharing\n- Q&A with experienced freelancers\n\nBring your business cards!',
-      location: 'Co-working Space, Banani',
-      locationName: 'Co-working Space',
+      title: 'ফ্রিল্যান্সার মিটআপ ও নেটওয়ার্কিং',
+      description: 'সহ ফ্রিল্যান্সারদের সাথে সংযোগ স্থাপন করুন, অভিজ্ঞতা ভাগাভাগি করুন এবং আপনার পেশাদার নেটওয়ার্ক গড়ে তুলুন।\n\nকর্মসূচি:\n- স্বাগত ও পরিচয়\n- প্যানেল আলোচনা: "আপনার ফ্রিল্যান্স ব্যবসা বিস্তার"\n- নেটওয়ার্কিং সেশন\n- রিসোর্স ভাগাভাগি\n- অভিজ্ঞ ফ্রিল্যান্সারদের সাথে প্রশ্নোত্তর\n\nআপনার ব্যবসায়িক কার্ড নিয়ে আসুন!',
+      location: 'কো-ওয়ার্কিং স্পেস, বনানী',
+      locationName: 'কো-ওয়ার্কিং স্পেস',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -483,10 +483,10 @@ async function main() {
       tagIds: [tags[0].id, tags[2].id] // networking, free
     },
     {
-      title: 'Weekend Hiking Adventure',
-      description: 'Explore the beautiful trails around Dhaka with fellow hiking enthusiasts!\n\nDetails:\n- Moderate difficulty level\n- 5km trail with scenic views\n- Professional guide included\n- Safety equipment provided\n- Lunch and refreshments included\n\nWear comfortable hiking shoes and bring a backpack.',
-      location: 'Savar Hills, Dhaka',
-      locationName: 'Savar Hills',
+      title: 'সাপ্তাহিক হাইকিং অ্যাডভেঞ্চার',
+      description: 'হাইকিং উৎসাহীদের সাথে ঢাকার আশেপাশের সুন্দর ট্রেইলগুলি অন্বেষণ করুন!\n\nবিস্তারিত:\n- মধ্যম অসুবিধার স্তর\n- দৃশ্যমান দৃশ্যসহ ৫ কিমি ট্রেইল\n- পেশাদার গাইড অন্তর্ভুক্ত\n- নিরাপত্তা সরঞ্জাম সরবরাহ\n- দুপুরের খাবার এবং পানীয় অন্তর্ভুক্ত\n\nআরামদায়ক হাইকিং জুতা পরুন এবং একটি ব্যাকপ্যাক নিয়ে আসুন।',
+      location: 'সাভার পাহাড়, ঢাকা',
+      locationName: 'সাভার পাহাড়',
       locationAddress: '32-43 47th st, Astoria NY 11103',
       locationLat: 40.7614,
       locationLng: -73.9176,
@@ -611,21 +611,21 @@ async function main() {
 
   // Add comments to events
   const commentTexts = [
-    "This looks amazing! Can't wait to attend 🎉",
-    "Great initiative! Thanks for organizing this.",
-    "Will there be any prerequisites for this event?",
-    "I attended the last one and it was fantastic!",
-    "Perfect timing, I was looking for something like this.",
-    "Is there parking available at the venue?",
-    "The description sounds very comprehensive. Well planned!",
-    "Count me in! This is exactly what I needed.",
-    "Will there be any follow-up sessions?",
-    "Thanks for making this beginner-friendly!",
-    "The venue looks perfect for this type of event.",
-    "I'm bringing a friend along. Hope that's okay!",
-    "This will be my first time attending. Any tips?",
-    "The agenda looks well structured. Good job!",
-    "Looking forward to the networking opportunities!"
+    "এটা দেখতে অসাধারণ লাগছে! অংশগ্রহণের জন্য অপেক্ষায় রইলাম 🎉",
+    "দুর্দান্ত উদ্যোগ! এটি আয়োজনের জন্য ধন্যবাদ।",
+    "এই ইভেন্টের জন্য কোনো পূর্বশর্ত আছে কি?",
+    "আমি গত বারের অনুষ্ঠানে গিয়েছিলাম এবং এটি চমৎকার ছিল!",
+    "নিখুঁত সময়, আমি ঠিক এরকম কিছু খুঁজছিলাম।",
+    "ভেন্যুতে পার্কিং সুবিধা আছে কি?",
+    "বর্ণনাটি খুবই বিস্তৃত শোনাচ্ছে। ভালো পরিকল্পনা!",
+    "আমাকে গণনা করুন! এটি ঠিক যা আমার প্রয়োজন ছিল।",
+    "কোনো ফলো-আপ সেশন থাকবে কি?",
+    "এটি নতুনদের জন্য উপযুক্ত করার জন্য ধন্যবাদ!",
+    "ভেন্যুটি এই ধরনের ইভেন্টের জন্য নিখুঁত মনে হচ্ছে।",
+    "আমি একজন বন্ধুকে সাথে নিয়ে আসছি। আশা করি সমস্যা নেই!",
+    "এটি আমার প্রথমবার অংশগ্রহণ। কোনো টিপস আছে?",
+    "কর্মসূচিটি সুসংগঠিত দেখাচ্ছে। ভালো কাজ!",
+    "নেটওয়ার্কিং সুযোগের জন্য উন্মুখ হয়ে আছি!"
   ];
 
   // Add comments to all events (including main user commenting on others' events)
