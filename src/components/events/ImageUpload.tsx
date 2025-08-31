@@ -73,35 +73,41 @@ export default function ImageUpload({
   const handleAddImage = async () => {
     if (!isOwner) return;
 
-    setIsUploading(true);
-    try {
-      const { url, width, height } = generateRandomImage();
+    // In development, use random images. In production, this would trigger file upload
+    if (process.env.NODE_ENV === "development") {
+      setIsUploading(true);
+      try {
+        const { url, width, height } = generateRandomImage();
 
-      const response = await fetch(`/api/events/${eventId}/images`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          url,
-          width,
-          height,
-          altText: "Event image",
-          caption: "",
-        }),
-      });
+        const response = await fetch(`/api/events/${eventId}/images`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            url,
+            width,
+            height,
+            altText: "Event image",
+            caption: "",
+          }),
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to add image");
+        if (!response.ok) {
+          throw new Error("Failed to add image");
+        }
+
+        const { image } = await response.json();
+        onImagesChange([...images, image]);
+      } catch (error) {
+        console.error("Error adding image:", error);
+        alert("Failed to add image. Please try again.");
+      } finally {
+        setIsUploading(false);
       }
-
-      const { image } = await response.json();
-      onImagesChange([...images, image]);
-    } catch (error) {
-      console.error("Error adding image:", error);
-      alert("Failed to add image. Please try again.");
-    } finally {
-      setIsUploading(false);
+    } else {
+      // Production: Trigger file upload (to be implemented)
+      alert("File upload functionality will be implemented for production");
     }
   };
 
@@ -182,7 +188,7 @@ export default function ImageUpload({
             ) : (
               <>
                 <Upload className="w-4 h-4" />
-                Add Random Image
+                Add Image
               </>
             )}
           </button>
@@ -200,7 +206,7 @@ export default function ImageUpload({
                 disabled={isUploading}
                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
               >
-                Add First Image
+                Add Image
               </button>
             )}
           </div>
