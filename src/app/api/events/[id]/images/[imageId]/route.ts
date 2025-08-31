@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma';
 // DELETE /api/events/[id]/images/[imageId] - Delete an image
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string; imageId: string } }
+  { params }: { params: Promise<{ id: string; imageId: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -17,7 +17,7 @@ export async function DELETE(
       );
     }
 
-    const { id: eventId, imageId } = params;
+    const { id: eventId, imageId } = await params;
 
     // Check if user owns the event
     const event = await prisma.event.findUnique({
@@ -83,7 +83,7 @@ export async function DELETE(
 // PATCH /api/events/[id]/images/[imageId] - Update image details
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string; imageId: string } }
+  { params }: { params: Promise<{ id: string; imageId: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -94,7 +94,7 @@ export async function PATCH(
       );
     }
 
-    const { id: eventId, imageId } = params;
+    const { id: eventId, imageId } = await params;
     const body = await request.json();
     const { altText, caption, order } = body;
 

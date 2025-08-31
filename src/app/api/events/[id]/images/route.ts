@@ -6,10 +6,10 @@ import { prisma } from '@/lib/prisma';
 // GET /api/events/[id]/images - Get all images for an event
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const eventId = params.id;
+    const { id: eventId } = await params;
 
     // Check if event exists
     const event = await prisma.event.findUnique({
@@ -81,7 +81,7 @@ export async function GET(
 // POST /api/events/[id]/images - Add a new image to an event
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -92,7 +92,7 @@ export async function POST(
       );
     }
 
-    const eventId = params.id;
+    const { id: eventId } = await params;
     const body = await request.json();
     const { url, altText, caption, width, height } = body;
 
