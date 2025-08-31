@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ImageCarousel from "./ImageCarousel";
+import CommentSection from "./CommentSection";
 
 interface EventDetailsProps {
   eventId: string;
@@ -532,6 +533,11 @@ export function EventDetails({ eventId }: EventDetailsProps) {
           </div>
         </div>
       )}
+
+      {/* Comments Section */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <CommentSection eventId={eventId} />
+      </div>
     </div>
   );
 }

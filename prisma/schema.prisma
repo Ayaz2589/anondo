@@ -55,6 +55,10 @@ model User {
   createdEvents  Event[]            @relation("CreatedEvents")
   participations EventParticipant[] @relation("EventParticipations")
 
+  // Comment relations
+  comments     Comment[]     @relation("UserComments")
+  commentLikes CommentLike[] @relation("UserCommentLikes")
+
   // Follow relations
   following Follow[] @relation("Follower")
   followers Follow[] @relation("Following")
@@ -92,6 +96,7 @@ model Event {
   categories   EventCategory[]
   tags         EventTag[]
   images       EventImage[]
+  comments     Comment[]
 
   @@index([creatorId])
   @@index([startDate])
@@ -172,6 +177,42 @@ model EventImage {
 
   @@index([eventId])
   @@index([eventId, order]) // For efficient ordering queries
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  authorId String
+  author   User   @relation("UserComments", fields: [authorId], references: [id], onDelete: Cascade)
+
+  likes CommentLike[]
+
+  @@index([eventId])
+  @@index([authorId])
+  @@index([eventId, createdAt]) // For efficient chronological ordering
+}
+
+model CommentLike {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // Relations
+  commentId String
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation("UserCommentLikes", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId]) // Prevent duplicate likes
+  @@index([commentId])
+  @@index([userId])
 }
 
 // Enums
