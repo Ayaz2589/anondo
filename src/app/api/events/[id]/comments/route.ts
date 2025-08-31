@@ -10,7 +10,6 @@ export async function GET(
 ) {
   try {
     const { id: eventId } = await params;
-    console.log('Fetching comments for event:', eventId);
 
     // Check if event exists and is accessible
     const event = await prisma.event.findUnique({
@@ -103,9 +102,8 @@ export async function GET(
     return NextResponse.json({ comments: transformedComments });
   } catch (error) {
     console.error('Error fetching comments:', error);
-    console.error('Error details:', error instanceof Error ? error.message : 'Unknown error');
     return NextResponse.json(
-      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

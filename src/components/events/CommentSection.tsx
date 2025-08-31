@@ -47,9 +47,7 @@ export default function CommentSection({ eventId }: CommentSectionProps) {
 
       const response = await fetch(`/api/events/${eventId}/comments`);
       if (!response.ok) {
-        const errorData = await response.text();
-        console.error("API Error:", response.status, errorData);
-        throw new Error(`Failed to fetch comments: ${response.status}`);
+        throw new Error("Failed to fetch comments");
       }
 
       const data = await response.json();

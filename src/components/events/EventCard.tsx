@@ -106,8 +106,11 @@ export function EventCard({
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div className="flex-1">
-          <Link href={`/events/${event.id}`} className="hover:text-blue-600">
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          <Link
+            href={`/events/${event.id}`}
+            className="hover:text-blue-600 transition-colors"
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
               {event.title}
             </h3>
           </Link>
@@ -249,8 +252,14 @@ export function EventCard({
           {isCreator ? (
             <>
               <Link
+                href={`/events/${event.id}`}
+                className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700 transition-colors text-center"
+              >
+                {t("events.viewDetails")}
+              </Link>
+              <Link
                 href={`/events/${event.id}/edit`}
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors text-center"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors text-center"
               >
                 {t("events.editEvent")}
               </Link>
