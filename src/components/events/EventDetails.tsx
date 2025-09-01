@@ -10,6 +10,7 @@ import ImageCarousel from "./ImageCarousel";
 import CommentSection from "./CommentSection";
 import ClickableAddress from "./ClickableAddress";
 import GoogleMapPreview from "./GoogleMapPreview";
+import { Avatar } from "../ui";
 
 interface EventDetailsProps {
   eventId: string;
@@ -511,22 +512,13 @@ export function EventDetails({ eventId }: EventDetailsProps) {
                 key={participant.id}
                 className="flex items-center p-3 bg-gray-50 rounded-lg"
               >
-                {participant.user.image ? (
-                  <Image
-                    src={participant.user.image}
-                    alt={participant.user.name || "Participant"}
-                    width={32}
-                    height={32}
-                    className="w-8 h-8 rounded-full mr-3"
-                  />
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-gray-300 mr-3 flex items-center justify-center">
-                    <span className="text-xs font-medium text-gray-600">
-                      {participant.user.name?.charAt(0) ||
-                        participant.user.email.charAt(0)}
-                    </span>
-                  </div>
-                )}
+                <Avatar
+                  src={participant.user.image}
+                  name={participant.user.name}
+                  email={participant.user.email || ""}
+                  size="md"
+                  className="mr-3"
+                />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 truncate">
                     {participant.user.name || participant.user.email}

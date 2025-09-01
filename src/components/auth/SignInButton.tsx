@@ -3,6 +3,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { Avatar } from "../ui";
 
 export function SignInButton() {
   const { data: session, status } = useSession();
@@ -21,15 +22,12 @@ export function SignInButton() {
     return (
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
-          {session.user?.image && (
-            <Image
-              src={session.user.image}
-              alt={session.user.name || "User"}
-              width={32}
-              height={32}
-              className="w-8 h-8 rounded-full"
-            />
-          )}
+          <Avatar
+            src={session.user?.image}
+            name={session.user?.name}
+            email={session.user?.email || ""}
+            size="md"
+          />
           <span className="text-sm font-medium">
             {t("auth.signedInAs")} {session.user?.name || session.user?.email}
           </span>

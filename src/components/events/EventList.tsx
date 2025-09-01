@@ -1,15 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
 import { EventCard } from "./EventCard";
+import { CalendarDays } from "lucide-react";
+import { Button, Card } from "../ui";
 
 interface Event {
   id: string;
   title: string;
   description: string | null;
   location: string | null;
+  locationName: string | null;
+  locationAddress: string | null;
+  locationLat: number | null;
+  locationLng: number | null;
+  locationPlaceId: string | null;
   startDate: string;
   endDate: string | null;
   maxCapacity: number | null;
@@ -61,10 +68,10 @@ export function EventList({
   const [activeTab, setActiveTab] = useState<"created" | "joined">("created");
 
   useEffect(() => {
-    if (session?.user?.id) {
+    if ((session?.user as any)?.id) {
       fetchUserEvents();
     }
-  }, [session?.user?.id, type, feed]);
+  }, [(session?.user as any)?.id, type, feed]);
 
   const fetchUserEvents = async () => {
     try {
@@ -82,7 +89,7 @@ export function EventList({
         } else {
           // Fetch both created and joined events
           const response = await fetch(
-            `/api/users/${session?.user?.id}/events`
+            `/api/users/${(session?.user as any)?.id}/events`
           );
           if (!response.ok) throw new Error(t("messages.failedToFetch"));
 
@@ -93,7 +100,7 @@ export function EventList({
       } else {
         // Fetch specific type
         const response = await fetch(
-          `/api/users/${session?.user?.id}/events?type=${type}`
+          `/api/users/${(session?.user as any)?.id}/events?type=${type}`
         );
         if (!response.ok) throw new Error(t("messages.failedToFetch"));
 
@@ -165,63 +172,67 @@ export function EventList({
 
   if (!session) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-600">{t("auth.signInRequired")}</p>
-      </div>
+      <Card className="p-8">
+        <div className="text-center">
+          <div className="rounded-full bg-muted p-4 w-fit mx-auto mb-4">
+            <CalendarDays className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h3 className="mb-2">Sign in required</h3>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            {t("auth.signInRequired")}
+          </p>
+        </div>
+      </Card>
     );
   }
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="flex flex-col items-center justify-center py-16">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent mb-4"></div>
+        <p className="text-muted-foreground">Loading events...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center py-12">
-        <p className="text-red-600 mb-4">
-          {t("common.error")}: {error}
-        </p>
-        <button
-          onClick={fetchUserEvents}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-        >
-          {t("common.tryAgain")}
-        </button>
-      </div>
+      <Card className="p-8">
+        <div className="text-center">
+          <div className="rounded-full bg-destructive/10 p-4 w-fit mx-auto mb-4">
+            <CalendarDays className="h-8 w-8 text-destructive" />
+          </div>
+          <h3 className="mb-2">Something went wrong</h3>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            Error: {error}
+          </p>
+          <Button onClick={fetchUserEvents} variant="outline">
+            Try Again
+          </Button>
+        </div>
+      </Card>
     );
   }
 
   const renderEventGrid = (eventList: Event[]) => {
     if (eventList.length === 0) {
       return (
-        <div className="text-center py-12">
-          <svg
-            className="mx-auto h-12 w-12 text-gray-400 mb-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
-          <p className="text-gray-600 mb-4">{t("events.noEventsFound")}</p>
-          {type === "created" && (
-            <a
-              href="/events/create"
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 inline-block"
-            >
-              {t("events.createFirstEvent")}
-            </a>
-          )}
-        </div>
+        <Card className="p-8">
+          <div className="text-center">
+            <div className="rounded-full bg-muted p-4 w-fit mx-auto mb-4">
+              <CalendarDays className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <h3 className="mb-2">No events found</h3>
+            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+              No events match your criteria
+            </p>
+            {type === "created" && (
+              <Button asChild>
+                <a href="/events/create">Create Your First Event</a>
+              </Button>
+            )}
+          </div>
+        </Card>
       );
     }
 
@@ -242,47 +253,41 @@ export function EventList({
 
   if (type === "all") {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         {title && (
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
-            <a
-              href="/events/create"
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            >
-              {t("events.createEvent")}
-            </a>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2>{title}</h2>
+              <p className="text-muted-foreground">
+                Manage your created and joined events
+              </p>
+            </div>
+            <Button asChild>
+              <a href="/events/create">Create Event</a>
+            </Button>
           </div>
         )}
 
-        {/* Tab Navigation */}
+        {/* Enhanced Tab Navigation */}
         <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
-            <button
+          <nav className="flex space-x-2" aria-label="Event tabs">
+            <Button
               onClick={() => setActiveTab("created")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === "created"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              variant={activeTab === "created" ? "default" : "ghost"}
             >
-              {t("events.createdEvents")} ({createdEvents.length})
-            </button>
-            <button
+              Created Events ({createdEvents.length})
+            </Button>
+            <Button
               onClick={() => setActiveTab("joined")}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === "joined"
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              variant={activeTab === "joined" ? "default" : "ghost"}
             >
-              {t("events.joinedEvents")} ({joinedEvents.length})
-            </button>
+              Joined Events ({joinedEvents.length})
+            </Button>
           </nav>
         </div>
 
         {/* Tab Content */}
-        <div className="mt-6">
+        <div>
           {activeTab === "created"
             ? renderEventGrid(createdEvents)
             : renderEventGrid(joinedEvents)}
@@ -294,10 +299,15 @@ export function EventList({
   // For following feed, show as a simple list
   if (feed === "following") {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         {title && (
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2>{title}</h2>
+              <p className="text-muted-foreground">
+                Events from people you follow
+              </p>
+            </div>
           </div>
         )}
 
@@ -307,17 +317,21 @@ export function EventList({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {title && (
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2>{title}</h2>
+            <p className="text-muted-foreground">
+              {type === "created"
+                ? "Events you've created"
+                : "Events you've joined"}
+            </p>
+          </div>
           {type === "created" && (
-            <a
-              href="/events/create"
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            >
-              {t("events.createEvent")}
-            </a>
+            <Button asChild>
+              <a href="/events/create">Create Event</a>
+            </Button>
           )}
         </div>
       )}

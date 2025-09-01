@@ -144,7 +144,7 @@ async function main() {
       id: 'cmexdecb10000c9xb76gmgm9b',
       email: 'ayaz2589@gmail.com',
       name: 'Ayaz Uddin',
-      image: 'https://placehold.co/100x100/4F46E5/FFFFFF?text=AU'
+      image: null
     }
   });
 
@@ -156,7 +156,7 @@ async function main() {
       create: {
         email: 'john.doe@example.com',
         name: 'জন দাস',
-        image: 'https://placehold.co/100x100/10B981/FFFFFF?text=JD'
+        image: null
       }
     }),
     prisma.user.upsert({
@@ -165,7 +165,7 @@ async function main() {
       create: {
         email: 'jane.smith@example.com',
         name: 'জেনিফার শর্মা',
-        image: 'https://placehold.co/100x100/F59E0B/FFFFFF?text=JS'
+        image: null
       }
     }),
     prisma.user.upsert({
@@ -174,7 +174,7 @@ async function main() {
       create: {
         email: 'mike.wilson@example.com',
         name: 'মাইকেল ওয়াহিদ',
-        image: 'https://placehold.co/100x100/EF4444/FFFFFF?text=MW'
+        image: null
       }
     }),
     prisma.user.upsert({
@@ -183,7 +183,7 @@ async function main() {
       create: {
         email: 'sarah.johnson@example.com',
         name: 'সারা জাহান',
-        image: 'https://placehold.co/100x100/8B5CF6/FFFFFF?text=SJ'
+        image: null
       }
     }),
     prisma.user.upsert({
@@ -192,7 +192,7 @@ async function main() {
       create: {
         email: 'alex.brown@example.com',
         name: 'আলেক্স বিশ্বাস',
-        image: 'https://placehold.co/100x100/EC4899/FFFFFF?text=AB'
+        image: null
       }
     }),
     prisma.user.upsert({
@@ -201,7 +201,7 @@ async function main() {
       create: {
         email: 'lisa.davis@example.com',
         name: 'লিসা দত্ত',
-        image: 'https://placehold.co/100x100/06B6D4/FFFFFF?text=LD'
+        image: null
       }
     })
   ]);

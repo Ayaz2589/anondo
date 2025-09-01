@@ -1,11 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
+import { Calendar, MapPin, Users, Edit, Trash2 } from "lucide-react";
 import ClickableAddress from "./ClickableAddress";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+  Avatar,
+  Badge,
+} from "../ui";
 
 interface EventCardProps {
   event: {
@@ -72,10 +82,9 @@ export function EventCard({
     ? event._count.participants >= event.maxCapacity
     : false;
 
-  const formatDate = (dateString: string) => {
+  const formatDateTime = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
-      weekday: "short",
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -84,21 +93,17 @@ export function EventCard({
     });
   };
 
-  const handleJoin = async () => {
-    if (!onJoin) return;
-    setIsLoading(true);
-    await onJoin(event.id);
-    setIsLoading(false);
+  const handleCardClick = () => {
+    window.location.href = `/events/${event.id}`;
   };
 
-  const handleLeave = async () => {
-    if (!onLeave) return;
-    setIsLoading(true);
-    await onLeave(event.id);
-    setIsLoading(false);
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.location.href = `/events/${event.id}/edit`;
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!onDelete) return;
     if (window.confirm(t("messages.confirmDelete"))) {
       setIsLoading(true);
@@ -107,197 +112,127 @@ export function EventCard({
     }
   };
 
-  return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border border-gray-200">
-      {/* Header */}
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex-1">
-          <Link
-            href={`/events/${event.id}`}
-            className="hover:text-blue-600 transition-colors"
-          >
-            <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
-              {event.title}
-            </h3>
-          </Link>
+  const handleJoin = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!onJoin) return;
+    setIsLoading(true);
+    await onJoin(event.id);
+    setIsLoading(false);
+  };
 
-          {/* Categories */}
-          {event.categories.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-2">
+  const handleLeave = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!onLeave) return;
+    setIsLoading(true);
+    await onLeave(event.id);
+    setIsLoading(false);
+  };
+
+  return (
+    <Card
+      className="cursor-pointer hover:shadow-md transition-shadow duration-200 relative"
+      onClick={handleCardClick}
+    >
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <CardTitle className="mb-2">{event.title}</CardTitle>
+            <div className="flex flex-wrap gap-1">
               {event.categories.map(({ category }) => (
-                <span
+                <Badge
                   key={category.id}
-                  className="px-2 py-1 text-xs font-medium rounded-full text-white"
-                  style={{ backgroundColor: category.color || "#6B7280" }}
+                  variant="secondary"
+                  className="text-xs"
                 >
                   {category.name}
-                </span>
+                </Badge>
               ))}
+            </div>
+          </div>
+          {isCreator && (
+            <div className="flex gap-2 ml-2">
+              <Edit
+                className="h-5 w-5 text-gray-500 hover:text-gray-700 cursor-pointer transition-colors"
+                onClick={(e) => handleEdit(e)}
+              />
+              <Trash2
+                className="h-5 w-5 text-gray-500 hover:text-red-600 cursor-pointer transition-colors"
+                onClick={(e) => handleDelete(e)}
+              />
             </div>
           )}
         </div>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <CardDescription className="mb-5 line-clamp-2">
+          {event.description}
+        </CardDescription>
 
-        {/* Status Badge */}
-        <span
-          className={`px-2 py-1 text-xs font-medium rounded-full ${
-            event.status === "ACTIVE"
-              ? "bg-green-100 text-green-800"
-              : event.status === "DRAFT"
-              ? "bg-yellow-100 text-yellow-800"
-              : event.status === "CANCELLED"
-              ? "bg-red-100 text-red-800"
-              : "bg-gray-100 text-gray-800"
-          }`}
-        >
-          {event.status}
-        </span>
-      </div>
-
-      {/* Description */}
-      {event.description && (
-        <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
-      )}
-
-      {/* Event Details */}
-      <div className="space-y-2 mb-4">
-        <div className="flex items-center text-sm text-gray-500">
-          <svg
-            className="w-4 h-4 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
-          <span>{formatDate(event.startDate)}</span>
-          {event.endDate && (
-            <span className="ml-2">- {formatDate(event.endDate)}</span>
-          )}
-        </div>
-
-        {(event.locationAddress || event.location) && (
-          <div className="text-sm">
-            <ClickableAddress
-              address={event.locationAddress || event.location || ""}
-              locationName={event.locationName || undefined}
-              lat={event.locationLat || undefined}
-              lng={event.locationLng || undefined}
-              className="text-gray-500 hover:text-blue-600"
-              showExternalIcon={false}
-            />
-          </div>
-        )}
-
-        <div className="flex items-center text-sm text-gray-500">
-          <svg
-            className="w-4 h-4 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
-            />
-          </svg>
-          <span>
-            {event._count.participants} {t("events.participant")}
-            {event._count.participants !== 1 ? "s" : ""}
-            {event.maxCapacity && ` / ${event.maxCapacity}`}
-          </span>
-        </div>
-      </div>
-
-      {/* Creator Info */}
-      <div className="flex items-center mb-4 pb-4 border-b border-gray-100">
-        {event.creator.image ? (
-          <Image
-            src={event.creator.image}
-            alt={event.creator.name || "Creator"}
-            width={32}
-            height={32}
-            className="w-8 h-8 rounded-full mr-3"
-          />
-        ) : (
-          <div className="w-8 h-8 rounded-full bg-gray-300 mr-3 flex items-center justify-center">
-            <span className="text-xs font-medium text-gray-600">
-              {event.creator.name?.charAt(0) || event.creator.email.charAt(0)}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs text-gray-400">
+            <Calendar className="h-4 w-4 flex-shrink-0" />
+            <span className="whitespace-nowrap overflow-hidden text-ellipsis">
+              {formatDateTime(event.startDate)}
+              {event.endDate && ` - ${formatDateTime(event.endDate)}`}
             </span>
           </div>
-        )}
-        <div>
-          <p className="text-sm font-medium text-gray-900">
-            {event.creator.name || event.creator.email}
-          </p>
-          <p className="text-xs text-gray-500">{t("events.eventCreator")}</p>
-        </div>
-      </div>
 
-      {/* Action Buttons */}
-      {showActions && session && (
-        <div className="flex gap-2">
-          {isCreator ? (
-            <>
-              <Link
-                href={`/events/${event.id}`}
-                className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700 transition-colors text-center"
-              >
-                {t("events.viewDetails")}
-              </Link>
-              <Link
-                href={`/events/${event.id}/edit`}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors text-center"
-              >
-                {t("events.editEvent")}
-              </Link>
-              <button
-                onClick={handleDelete}
-                disabled={isLoading}
-                className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
-              >
-                {isLoading ? "..." : t("common.delete")}
-              </button>
-            </>
-          ) : (
-            <>
-              {isParticipant ? (
-                <button
-                  onClick={handleLeave}
-                  disabled={isLoading}
-                  className="flex-1 bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
-                >
-                  {isLoading ? t("events.leaving") : t("events.leaveEvent")}
-                </button>
-              ) : (
-                <button
-                  onClick={handleJoin}
-                  disabled={isLoading || isFull}
-                  className="flex-1 bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition-colors disabled:opacity-50"
-                >
-                  {isLoading
-                    ? t("events.joining")
-                    : isFull
-                    ? t("events.eventFull")
-                    : t("events.joinEvent")}
-                </button>
-              )}
-              <Link
-                href={`/events/${event.id}`}
-                className="px-4 py-2 bg-gray-600 text-white rounded-md text-sm font-medium hover:bg-gray-700 transition-colors"
-              >
-                {t("events.viewDetails")}
-              </Link>
-            </>
+          {(event.locationAddress || event.location) && (
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <MapPin className="h-4 w-4" />
+              <span className="truncate">
+                {event.locationAddress || event.location}
+              </span>
+            </div>
           )}
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <Users className="h-4 w-4" />
+              <span>
+                {event._count.participants} {t("events.participant")}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <Avatar
+                src={event.creator.image}
+                name={event.creator.name}
+                email={event.creator.email}
+                size="sm"
+              />
+              <span>By {event.creator.name || event.creator.email}</span>
+            </div>
+          </div>
         </div>
-      )}
-    </div>
+
+        {/* Action Buttons */}
+        {showActions && session && !isCreator && (
+          <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
+            {isParticipant ? (
+              <Button
+                onClick={() => handleLeave({} as React.MouseEvent)}
+                disabled={isLoading}
+                variant="destructive"
+                className="flex-1"
+              >
+                {isLoading ? t("events.leaving") : t("events.leaveEvent")}
+              </Button>
+            ) : (
+              <Button
+                onClick={() => handleJoin({} as React.MouseEvent)}
+                disabled={isLoading || isFull}
+                className="flex-1 bg-green-600 hover:bg-green-700"
+              >
+                {isLoading
+                  ? t("events.joining")
+                  : isFull
+                  ? t("events.eventFull")
+                  : t("events.joinEvent")}
+              </Button>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
