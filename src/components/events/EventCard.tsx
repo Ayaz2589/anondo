@@ -13,8 +13,8 @@ import {
   CardContent,
   CardTitle,
   CardDescription,
-  Avatar,
   Badge,
+  Avatar,
 } from "../ui";
 
 interface EventCardProps {
@@ -130,20 +130,16 @@ export function EventCard({
 
   return (
     <Card
-      className="cursor-pointer hover:shadow-md transition-shadow duration-200 relative"
+      className="cursor-pointer hover:shadow-lg transition-shadow duration-200 relative"
       onClick={handleCardClick}
     >
-      <CardHeader className="pb-3">
+      <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <CardTitle className="mb-2">{event.title}</CardTitle>
-            <div className="flex flex-wrap gap-1">
+            <CardTitle>{event.title}</CardTitle>
+            <div className="flex flex-wrap gap-1 mt-2">
               {event.categories.map(({ category }) => (
-                <Badge
-                  key={category.id}
-                  variant="secondary"
-                  className="text-xs"
-                >
+                <Badge key={category.id} variant="secondary">
                   {category.name}
                 </Badge>
               ))}
@@ -152,24 +148,24 @@ export function EventCard({
           {isCreator && (
             <div className="flex gap-2 ml-2">
               <Edit
-                className="h-5 w-5 text-gray-500 hover:text-gray-700 cursor-pointer transition-colors"
+                className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
                 onClick={(e) => handleEdit(e)}
               />
               <Trash2
-                className="h-5 w-5 text-gray-500 hover:text-red-600 cursor-pointer transition-colors"
+                className="h-5 w-5 text-muted-foreground hover:text-destructive cursor-pointer transition-colors"
                 onClick={(e) => handleDelete(e)}
               />
             </div>
           )}
         </div>
       </CardHeader>
-      <CardContent className="pt-0">
-        <CardDescription className="mb-5 line-clamp-2">
+      <CardContent>
+        <CardDescription className="mb-4 line-clamp-2">
           {event.description}
         </CardDescription>
 
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-xs text-gray-400">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4 flex-shrink-0" />
             <span className="whitespace-nowrap overflow-hidden text-ellipsis">
               {formatDateTime(event.startDate)}
@@ -178,7 +174,7 @@ export function EventCard({
           </div>
 
           {(event.locationAddress || event.location) && (
-            <div className="flex items-center gap-2 text-xs text-gray-400">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <MapPin className="h-4 w-4" />
               <span className="truncate">
                 {event.locationAddress || event.location}
@@ -187,13 +183,13 @@ export function EventCard({
           )}
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs text-gray-400">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Users className="h-4 w-4" />
               <span>
                 {event._count.participants} {t("events.participant")}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-gray-400">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Avatar
                 src={event.creator.image}
                 name={event.creator.name}
@@ -207,7 +203,7 @@ export function EventCard({
 
         {/* Action Buttons */}
         {showActions && session && !isCreator && (
-          <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
+          <div className="flex gap-2 mt-6 pt-4 border-t">
             {isParticipant ? (
               <Button
                 onClick={() => handleLeave({} as React.MouseEvent)}
@@ -221,7 +217,8 @@ export function EventCard({
               <Button
                 onClick={() => handleJoin({} as React.MouseEvent)}
                 disabled={isLoading || isFull}
-                className="flex-1 bg-green-600 hover:bg-green-700"
+                variant="default"
+                className="flex-1"
               >
                 {isLoading
                   ? t("events.joining")
