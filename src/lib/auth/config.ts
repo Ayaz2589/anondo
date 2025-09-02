@@ -9,9 +9,13 @@ export const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
   callbacks: {
+    async signIn({ user, account, profile }: any) {
+      return true;
+    },
     async session({ session, user }: any) {
       if (user) {
         session.user.id = user.id;
@@ -27,4 +31,5 @@ export const authOptions = {
     strategy: 'database' as const,
   },
   secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development',
 };
